@@ -1,9 +1,7 @@
+import { Router } from '@modules/common/router';
+
 function App() {
-	return (
-		<div>
-			<h1>Vite + React</h1>
-		</div>
-	);
+	return <Router />;
 }
 
 export default App;
