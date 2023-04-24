@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".",
+		"moduleResolution": "node",
+		"paths": {
+			"@assets/*": ["./src/assets/*"],
+			"@modules/*": ["./src/modules/*"],
+			"@test/*": ["./src/test/*"],
+			"@i18n": ["./src/i18n"]
+		}
+	}
+}

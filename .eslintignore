@@ -1,0 +1,6 @@
+.eslintrc.json
+.prettierrc.js
+vite.config.ts
+.eslintcache
+lint-staged.config.js
+
