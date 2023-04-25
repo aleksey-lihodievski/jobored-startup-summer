@@ -7,7 +7,7 @@ interface LayoutProps {
 export const useStyles = createStyles(
 	(theme, { headerHeight }: LayoutProps) => ({
 		header: {
-			height: '100px',
+			height: headerHeight,
 		},
 
 		header__link: {
@@ -17,6 +17,10 @@ export const useStyles = createStyles(
 		},
 
 		header__container: {
+			height: '100%',
+		},
+
+		header__layout: {
 			height: '100%',
 			display: 'grid',
 			gridTemplateColumns: '1fr auto 1fr',

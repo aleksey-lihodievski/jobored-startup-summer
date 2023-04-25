@@ -1,18 +1,14 @@
+import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { DefaultLayout } from '@modules/common/components';
+const Vacancies = React.lazy(
+	() => import('@modules/vacancies/pages/Vacancies')
+);
 
 const Router = () => {
 	return (
 		<Routes>
-			<Route
-				path="/"
-				element={
-					<DefaultLayout>
-						<div>vacancies</div>
-					</DefaultLayout>
-				}
-			/>
+			<Route path="/" element={<Vacancies />} />
 			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
 	);
