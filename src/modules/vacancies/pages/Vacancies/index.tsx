@@ -1,15 +1,15 @@
-import { Button, Group, Input } from '@mantine/core';
+import { Button, Group, Input, Stack } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 
 import { IconSearch } from '@assets/icons';
 
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
-import { FiltersDesktop } from '@modules/vacancies/components';
+import { FiltersDesktop, VacancyCard } from '@modules/vacancies/components';
 
 import { useStyles } from './styles';
 
-const INPUT_PADDING = 16;
+const INPUT_PADDING = 24;
 
 const Vacancies = () => {
 	const [buttonWidth, setButtonWidth] = useState<number>();
@@ -31,20 +31,37 @@ const Vacancies = () => {
 				<title>Вакансии | Jobored</title>
 			</Helmet>
 			<DefaultContainer>
-				<Group className={classes.columnsWrapper} align="flex-start">
+				<Group
+					className={classes.columnsWrapper}
+					align="flex-start"
+					spacing={28}
+				>
 					<FiltersDesktop />
-					<Input
-						size="md"
-						placeholder="Введите название вакансии"
-						icon={<img src={IconSearch} alt="search icon" />}
-						className={classes.searchInput}
-						rightSectionWidth={buttonWidth}
-						rightSection={
-							<Button ref={searchButtonRef} size="xs">
-								Поиск
-							</Button>
-						}
-					/>
+					<Stack align="stretch" className={classes.contentWrapper}>
+						<Input
+							size="lg"
+							placeholder="Введите название вакансии"
+							className={classes.searchInput}
+							icon={<img src={IconSearch} alt="" />}
+							rightSectionWidth={buttonWidth}
+							rightSection={
+								<Button
+									ref={searchButtonRef}
+									className={classes.searchButton}
+									size="xs"
+								>
+									Поиск
+								</Button>
+							}
+						/>
+						<VacancyCard
+							jobTitle="Front-end developer"
+							paymentFrom={100_000}
+							paymentTo={300_000}
+							workType="Гибкий график"
+							location="Новый Уренгой"
+						/>
+					</Stack>
 				</Group>
 			</DefaultContainer>
 		</DefaultLayout>

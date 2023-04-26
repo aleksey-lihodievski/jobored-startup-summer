@@ -40,17 +40,15 @@ const FilterDesktop = () => {
 			withBorder
 		>
 			<Group position="apart">
-				<Title order={3}>Фильтры</Title>
+				<Title order={3} className={classes.title}>
+					Фильтры
+				</Title>
 
 				<Flex align="center" className={classes.resetText__wrapper}>
 					<Text color="red" className={classes.resetText}>
 						Сбросить все
 					</Text>
-					<img
-						src={IconClose}
-						alt="reset filters icon"
-						className={classes.closeIcon}
-					/>
+					<img src={IconClose} alt="" className={classes.closeIcon} />
 				</Flex>
 			</Group>
 
@@ -61,6 +59,7 @@ const FilterDesktop = () => {
 						size="md"
 						placeholder="Выберите отрасль"
 						rightSection={<img src={IconChevronDown} alt="" />}
+						styles={{ rightSection: { pointerEvents: 'none' } }}
 					/>
 				</FormGroup>
 
@@ -81,7 +80,7 @@ const FilterDesktop = () => {
 					/>
 				</FormGroup>
 			</Stack>
-			<Button mt={20} fullWidth>
+			<Button mt={20} fullWidth size="md">
 				Применить
 			</Button>
 		</Paper>

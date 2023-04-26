@@ -1,14 +1,19 @@
-import { createStyles } from '@mantine/core';
+import { createStyles, rem } from '@mantine/core';
 
 const COLOR_INDEX = 5;
 
 export const useStyles = createStyles((theme) => ({
+	title: {
+		fontSize: rem(20),
+	},
+
 	resetText__wrapper: {
 		cursor: 'pointer',
 	},
 
 	resetText: {
 		color: theme.colors.gray[COLOR_INDEX],
+		fontSize: rem(14),
 		fontWeight: 500,
 	},
 
@@ -43,5 +48,10 @@ export const useStyles = createStyles((theme) => ({
 				background: 'transparent',
 			}),
 		},
+	},
+
+	filterButton: {
+		marginTop: 20,
+		fontSize: rem(14),
 	},
 }));

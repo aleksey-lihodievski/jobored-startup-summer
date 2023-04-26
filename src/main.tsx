@@ -14,6 +14,7 @@ const queryClient = new QueryClient({
 });
 
 const overrides: MantineThemeOverride = {
+	fontFamily: 'Inter',
 	components: {
 		Paper: {
 			styles: () => ({
