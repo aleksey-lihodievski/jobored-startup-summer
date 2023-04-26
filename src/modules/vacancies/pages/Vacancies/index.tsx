@@ -1,5 +1,6 @@
 import { Button, Group, Input } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
+import { Helmet } from 'react-helmet';
 
 import { IconSearch } from '@assets/icons';
 
@@ -26,6 +27,9 @@ const Vacancies = () => {
 
 	return (
 		<DefaultLayout>
+			<Helmet>
+				<title>Вакансии | Jobored</title>
+			</Helmet>
 			<DefaultContainer>
 				<Group className={classes.columnsWrapper} align="flex-start">
 					<FiltersDesktop />

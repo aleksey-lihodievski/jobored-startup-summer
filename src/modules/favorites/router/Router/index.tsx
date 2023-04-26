@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { DefaultLayout } from '@modules/common/components';
@@ -9,6 +10,9 @@ const Router = () => {
 				path="/"
 				element={
 					<DefaultLayout>
+						<Helmet>
+							<title>Избранное | Jobored</title>
+						</Helmet>
 						<div>favorites</div>
 					</DefaultLayout>
 				}
