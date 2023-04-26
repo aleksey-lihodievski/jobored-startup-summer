@@ -13,7 +13,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { IconChevronDown, IconClose } from '@assets/icons';
 
-import FormGroup from '@modules/common/components/ui/FormGroup';
+import { FormGroup } from '@modules/common/components';
 
 import { useStyles } from './styles';
 
