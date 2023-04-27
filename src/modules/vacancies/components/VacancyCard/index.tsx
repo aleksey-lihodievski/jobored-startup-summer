@@ -71,3 +71,4 @@ const VacancyCard: React.FC<VacancyCardProps> = ({
 };
 
 export default VacancyCard;
+export { VacancyCardSkeleton } from './skeleton';

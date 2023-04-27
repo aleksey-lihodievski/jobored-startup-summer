@@ -29,4 +29,16 @@ export const useStyles = createStyles((theme) => ({
 		borderRadius: '50%',
 		margin: '0 2px',
 	},
+
+	skeletonBreadcrumbs: {
+		display: 'flex',
+		width: '100%',
+		maxWidth: '500px',
+	},
+
+	skeletonLocation: {
+		display: 'flex',
+		width: '100%',
+		maxWidth: '250px',
+	},
 }));

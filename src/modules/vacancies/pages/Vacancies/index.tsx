@@ -11,6 +11,7 @@ import { DefaultContainer, DefaultLayout } from '@modules/common/components';
 import { getVacancies } from '@modules/vacancies/api';
 import { getFields } from '@modules/vacancies/api/getFields';
 import { FiltersDesktop, VacancyCard } from '@modules/vacancies/components';
+import { VacancyCardSkeleton } from '@modules/vacancies/components/VacancyCard';
 
 import { useStyles } from './styles';
 import { FormSchema } from './types';
@@ -40,7 +41,7 @@ const Vacancies = () => {
 
 	const [search, setSearch] = useState('');
 
-	const { data } = useQuery(
+	const { data: vacancies, isLoading: vacanciesLoading } = useQuery(
 		['vacancies', page, jobField, paymentFrom, paymentTo, search],
 		{
 			queryFn: () =>
@@ -80,7 +81,9 @@ const Vacancies = () => {
 	}, []);
 
 	const totalPages =
-		typeof data?.total === 'number' ? Math.ceil(data.total / 4) : DEFAULT_PAGES;
+		typeof vacancies?.total === 'number'
+			? Math.ceil(vacancies.total / 4)
+			: DEFAULT_PAGES;
 
 	return (
 		<DefaultLayout>
@@ -122,17 +125,26 @@ const Vacancies = () => {
 									control={control}
 								/>
 							</form>
-							{data?.objects.map((vacancy) => (
-								<VacancyCard
-									key={vacancy.id}
-									jobTitle={vacancy.profession}
-									paymentFrom={vacancy.payment_from}
-									paymentTo={vacancy.payment_to}
-									currency={vacancy.currency}
-									workType={vacancy.type_of_work.title}
-									location={vacancy.town.title}
-								/>
-							))}
+							{!vacanciesLoading && vacancies ? (
+								vacancies.objects.map((vacancy) => (
+									<VacancyCard
+										key={vacancy.id}
+										jobTitle={vacancy.profession}
+										paymentFrom={vacancy.payment_from}
+										paymentTo={vacancy.payment_to}
+										currency={vacancy.currency}
+										workType={vacancy.type_of_work.title}
+										location={vacancy.town.title}
+									/>
+								))
+							) : (
+								<>
+									<VacancyCardSkeleton />
+									<VacancyCardSkeleton />
+									<VacancyCardSkeleton />
+									<VacancyCardSkeleton />
+								</>
+							)}
 						</Stack>
 						<Pagination
 							value={page}

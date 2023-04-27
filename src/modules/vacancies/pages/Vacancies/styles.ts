@@ -2,6 +2,9 @@ import { createStyles, rem } from '@mantine/core';
 
 export const useStyles = createStyles(() => ({
 	columnsWrapper: {
+		display: 'flex',
+		flexDirection: 'row',
+		flexWrap: 'nowrap',
 		width: '100%',
 	},
 
