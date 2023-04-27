@@ -5,7 +5,7 @@ export const useStyles = createStyles(() => ({
 		width: '100%',
 	},
 
-	contentWrapper: {
+	flex1: {
 		flex: 1,
 	},
 
@@ -26,5 +26,9 @@ export const useStyles = createStyles(() => ({
 
 		height: 'unset',
 		padding: '9px 20px',
+	},
+
+	pagination: {
+		justifyContent: 'center',
 	},
 }));

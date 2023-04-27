@@ -21,6 +21,7 @@ interface VacancyCardProps {
 	jobTitle: string;
 	paymentFrom?: number;
 	paymentTo?: number;
+	currency: string;
 	workType: string;
 	location: string;
 }
@@ -29,15 +30,16 @@ const VacancyCard: React.FC<VacancyCardProps> = ({
 	jobTitle,
 	paymentFrom,
 	paymentTo,
+	currency,
 	workType,
 	location,
 }) => {
 	const { classes } = useStyles();
 
-	const compensation = getCompensationString(paymentFrom, paymentTo);
+	const compensation = getCompensationString(currency, paymentFrom, paymentTo);
 
 	return (
-		<Paper component="article" p={23} pb={18} pt={17}>
+		<Paper component="article" p={23} pb={18} pt={17} withBorder>
 			<Stack spacing={12}>
 				<Group position="apart" noWrap>
 					<Title order={2} className={classes.cardTitle}>

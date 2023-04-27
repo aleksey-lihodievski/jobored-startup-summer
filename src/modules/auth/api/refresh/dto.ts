@@ -3,7 +3,7 @@ export interface RefreshTokenResponse {
 	refresh_token: string;
 	ttl: number;
 
-	/*** In miliseconds **/
+	/*** In seconds **/
 	expires_in: number;
 	token_type: string;
 }
