@@ -10,15 +10,21 @@ import { IconSearch } from '@assets/icons';
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
 import { getVacancies } from '@modules/vacancies/api';
 import { getFields } from '@modules/vacancies/api/getFields';
-import { FiltersDesktop, VacancyCard } from '@modules/vacancies/components';
+import {
+	Filters,
+	FiltersForm,
+	VacancyCard,
+} from '@modules/vacancies/components';
+import MobileFilters from '@modules/vacancies/components/MobileFilters';
 import { VacancyCardSkeleton } from '@modules/vacancies/components/VacancyCard';
 
 import { useStyles } from './styles';
-import { FormSchema } from './types';
+import { SearchForm } from './types';
 import { searchSchema } from './validation';
 
 const INPUT_PADDING = 24;
 const DEFAULT_PAGES = 5;
+const PAGE_ITEMS = 5;
 
 const Vacancies = () => {
 	const [buttonWidth, setButtonWidth] = useState<number>();
@@ -35,22 +41,25 @@ const Vacancies = () => {
 	});
 
 	const [page, setPage] = useState(1);
-	const [jobField, setJobField] = useState('');
-	const [paymentFrom, setPaymentFrom] = useState<number | ''>('');
-	const [paymentTo, setPaymentTo] = useState<number | ''>('');
+
+	const [filtersForm, setFiltersForm] = useState<FiltersForm>({
+		catalogues: '',
+		payment_from: '',
+		payment_to: '',
+	});
 
 	const [search, setSearch] = useState('');
 
 	const { data: vacancies, isLoading: vacanciesLoading } = useQuery(
-		['vacancies', page, jobField, paymentFrom, paymentTo, search],
+		['vacancies', page, filtersForm, search],
 		{
 			queryFn: () =>
 				getVacancies({
 					pageIdx: page - 1,
-					count: 4,
-					fields: jobField,
-					paymentFrom: paymentFrom || undefined,
-					paymentTo: paymentTo || undefined,
+					count: PAGE_ITEMS,
+					fields: filtersForm.catalogues,
+					paymentFrom: filtersForm.payment_from || undefined,
+					paymentTo: filtersForm.payment_to || undefined,
 					keyword: search,
 				}),
 		}
@@ -60,18 +69,13 @@ const Vacancies = () => {
 		queryFn: () => getFields(),
 	});
 
-	const onChangeSearch = useCallback((values: FormSchema) => {
+	const onChangeSearch = useCallback((values: SearchForm) => {
 		setSearch(values.search);
 	}, []);
 
-	const onChangeFilters = useCallback(
-		(newField: string, from: number | '', to: number | '') => {
-			setJobField(newField);
-			setPaymentFrom(from);
-			setPaymentTo(to);
-		},
-		[]
-	);
+	const onChangeFilters = useCallback((values: FiltersForm) => {
+		setFiltersForm(values);
+	}, []);
 
 	useEffect(() => {
 		const buttonRect = searchButtonRef.current?.getBoundingClientRect();
@@ -91,12 +95,22 @@ const Vacancies = () => {
 				<title>Вакансии | Jobored</title>
 			</Helmet>
 			<DefaultContainer>
+				<MobileFilters
+					values={filtersForm}
+					fields={fields}
+					onChange={onChangeFilters}
+				/>
 				<Group
 					className={classes.columnsWrapper}
 					align="flex-start"
 					spacing={28}
 				>
-					<FiltersDesktop fields={fields} onChange={onChangeFilters} />
+					<Filters
+						className={classes.hiddenTabletsAndBelow}
+						values={filtersForm}
+						fields={fields}
+						onChange={onChangeFilters}
+					/>
 					<Box className={classes.flex1}>
 						<Stack align="stretch" className={classes.flex1}>
 							<form onSubmit={handleSubmit(onChangeSearch)}>
@@ -112,9 +126,9 @@ const Vacancies = () => {
 											rightSectionWidth={buttonWidth}
 											rightSection={
 												<Button
-													type="submit"
 													ref={searchButtonRef}
-													className={classes.searchButton}
+													type="submit"
+													className={classes.inputButton}
 													size="xs"
 												>
 													Поиск

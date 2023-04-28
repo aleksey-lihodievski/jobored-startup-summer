@@ -1,12 +1,16 @@
 import { createStyles } from '@mantine/core';
 
 export const useStyles = createStyles((theme) => ({
-	cardTitle: { lineHeight: 1 },
+	cardTitle: {
+		lineHeight: 1,
+	},
 
 	cardTitle__link: {
 		fontSize: 20,
 		lineHeight: 1,
 		fontWeight: 600,
+
+		wordBreak: 'break-word',
 
 		['.mantine-Anchor-root']: {
 			lineHeight: 1,
@@ -16,6 +20,10 @@ export const useStyles = createStyles((theme) => ({
 	compensation: {
 		fontSize: 16,
 		fontWeight: 700,
+	},
+
+	breadcrumbs: {
+		flexWrap: 'wrap',
 	},
 
 	location: {

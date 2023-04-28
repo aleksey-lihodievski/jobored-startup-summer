@@ -56,7 +56,10 @@ const VacancyCard: React.FC<VacancyCardProps> = ({
 					</ActionIcon>
 				</Group>
 				<Group>
-					<Breadcrumbs separator={<div className={classes.separator} />}>
+					<Breadcrumbs
+						separator={<div className={classes.separator} />}
+						className={classes.breadcrumbs}
+					>
 						<Text className={classes.compensation}>{compensation}</Text>
 						<Text>{workType}</Text>
 					</Breadcrumbs>

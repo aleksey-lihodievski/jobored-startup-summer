@@ -7,7 +7,7 @@ import {
 	ScrollArea,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 import { LogoFull } from '@assets/img';
@@ -32,8 +32,27 @@ export function HeaderMenu() {
 
 	const { classes, cx } = useStyles({ headerHeight });
 
-	const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+	const [drawerOpen, { toggle: toggleDrawer, close: closeDrawer }] =
 		useDisclosure(false);
+
+	const disableScroll = useCallback(() => {
+		document.body.style.position = 'fixed';
+		document.body.style.width = '100%';
+	}, []);
+
+	const enableScroll = useCallback(() => {
+		document.body.style.position = 'static';
+		document.body.style.width = 'auto';
+	}, []);
+
+	useEffect(() => {
+		if (drawerOpen) {
+			disableScroll();
+			return;
+		}
+
+		enableScroll();
+	}, [drawerOpen]);
 
 	useEffect(() => {
 		closeDrawer();
@@ -66,7 +85,7 @@ export function HeaderMenu() {
 						</Group>
 
 						<Burger
-							opened={drawerOpened}
+							opened={drawerOpen}
 							onClick={toggleDrawer}
 							className={cx(classes.hiddenDesktop, classes.header__burger)}
 						/>
@@ -75,13 +94,14 @@ export function HeaderMenu() {
 			</Header>
 
 			<Drawer
-				opened={drawerOpened}
+				opened={drawerOpen}
 				onClose={closeDrawer}
 				closeOnEscape
 				padding="md"
 				size="100%"
 				scrollAreaComponent={ScrollArea.Autosize}
 				className={cx(classes.hiddenDesktop, classes.drawer)}
+				lockScroll={false}
 				closeButtonProps={{
 					size: '2rem',
 				}}

@@ -1,6 +1,6 @@
 import { createStyles, rem } from '@mantine/core';
 
-export const useStyles = createStyles(() => ({
+export const useStyles = createStyles((theme) => ({
 	columnsWrapper: {
 		display: 'flex',
 		flexDirection: 'row',
@@ -16,22 +16,25 @@ export const useStyles = createStyles(() => ({
 		['& .mantine-Input-input']: {
 			fontSize: rem(14),
 		},
-
-		['& .mantine-Input-rightSection']: {
-			display: 'flex',
-			justifyContent: 'center',
-			alignItems: 'center',
-		},
 	},
 
-	searchButton: {
+	inputButton: {
 		fontSize: rem(14),
-
-		height: 'unset',
-		padding: '9px 20px',
 	},
 
 	pagination: {
 		justifyContent: 'center',
+	},
+
+	hiddenDesktop: {
+		[theme.fn.largerThan('lg')]: {
+			display: 'none',
+		},
+	},
+
+	hiddenTabletsAndBelow: {
+		[theme.fn.smallerThan('lg')]: {
+			display: 'none',
+		},
 	},
 }));

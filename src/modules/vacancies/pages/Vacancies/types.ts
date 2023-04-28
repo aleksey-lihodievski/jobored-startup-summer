@@ -1,3 +1,3 @@
-export interface FormSchema {
+export interface SearchForm {
 	search: string;
 }

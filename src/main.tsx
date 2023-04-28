@@ -14,6 +14,12 @@ const queryClient = new QueryClient({
 });
 
 const overrides: MantineThemeOverride = {
+	globalStyles: () => ({
+		body: {
+			overflowY: 'scroll',
+			scrollbarGutter: 'stable',
+		},
+	}),
 	fontFamily: 'Inter',
 	components: {
 		Paper: {

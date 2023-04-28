@@ -1,2 +1,4 @@
-export { default as FiltersDesktop } from './FiltersDesktop';
+export { default as Filters } from './Filters';
+export * from './Filters';
+
 export { default as VacancyCard } from './VacancyCard';

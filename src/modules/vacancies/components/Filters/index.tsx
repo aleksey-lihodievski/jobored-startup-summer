@@ -25,33 +25,33 @@ import { FormGroup } from '@modules/common/components';
 import { Catalogue } from '@modules/vacancies/types';
 
 import { useStyles } from './styles';
-import { FormSchema } from './types';
+import { FiltersForm } from './types';
 import { filterSchema } from './validation';
 
 const PAYMENT_STEP = 50;
 
-interface FilterDesktopProps {
+interface FiltersProps {
 	fields?: Catalogue[];
-	onChange: (catalogue: string, from: number | '', to: number | '') => void;
+	values?: FiltersForm;
+	onChange: (values: FiltersForm) => void;
+	className?: string;
 }
 
-// const PAYMENT_MIN = 200;
-// const PAYMENT_MAX = 100_000;
-
-const FilterDesktop: React.FC<FilterDesktopProps> = ({ fields, onChange }) => {
-	const { handleSubmit, control, reset } = useForm<FormSchema>({
+const Filters: React.FC<FiltersProps> = ({
+	fields,
+	values = { catalogues: '', payment_from: '', payment_to: '' },
+	onChange,
+	className,
+}) => {
+	const { handleSubmit, control, reset } = useForm<FiltersForm>({
 		resolver: yupResolver(filterSchema),
-		defaultValues: {
-			payment_from: '',
-			payment_to: '',
-			catalogues: '',
-		},
+		defaultValues: values,
 	});
 
 	const [top, setTop] = useState<number>();
 
 	const paperRef = useRef<HTMLFormElement>(null);
-	const { classes } = useStyles();
+	const { classes, cx } = useStyles();
 
 	const handledFields = useMemo(
 		() =>
@@ -63,19 +63,30 @@ const FilterDesktop: React.FC<FilterDesktopProps> = ({ fields, onChange }) => {
 	);
 
 	const onSubmit = useCallback(
-		(values: FormSchema) => {
-			const from = values.payment_from ? Number(values.payment_from) : '';
-			const to = values.payment_to ? Number(values.payment_to) : '';
+		(formValues: FiltersForm) => {
+			const from = formValues.payment_from
+				? Number(formValues.payment_from)
+				: '';
 
-			onChange(values.catalogues, from, to);
+			const to = formValues.payment_to ? Number(formValues.payment_to) : '';
+
+			onChange({
+				catalogues: formValues.catalogues,
+				payment_from: from,
+				payment_to: to,
+			});
 		},
 		[onChange]
 	);
 
 	const onReset = useCallback(() => {
 		reset();
-		onChange('', '', '');
+		onChange({ catalogues: '', payment_from: '', payment_to: '' });
 	}, [onChange]);
+
+	useEffect(() => {
+		reset(values);
+	}, [values]);
 
 	useEffect(() => {
 		setTop(paperRef.current?.getBoundingClientRect().top);
@@ -86,11 +97,8 @@ const FilterDesktop: React.FC<FilterDesktopProps> = ({ fields, onChange }) => {
 			ref={paperRef}
 			onSubmit={handleSubmit(onSubmit)}
 			component="form"
-			pos="sticky"
+			className={cx(className, classes.filterDesktop__wrapper)}
 			top={top}
-			p={20}
-			pt={14}
-			miw={315}
 			withBorder
 		>
 			<Group position="apart">
@@ -167,4 +175,6 @@ const FilterDesktop: React.FC<FilterDesktopProps> = ({ fields, onChange }) => {
 	);
 };
 
-export default FilterDesktop;
+export default Filters;
+
+export * from './types';
