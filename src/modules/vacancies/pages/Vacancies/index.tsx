@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Controller, useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { IconSearch } from '@assets/icons';
 
@@ -27,28 +28,39 @@ const DEFAULT_PAGES = 5;
 const PAGE_ITEMS = 5;
 
 const Vacancies = () => {
+	const { search: urlSearchString, pathname } = useLocation();
+	const params = new URLSearchParams(urlSearchString);
+	const navigate = useNavigate();
+
 	const [buttonWidth, setButtonWidth] = useState<number>();
 
 	const { classes } = useStyles();
 
 	const searchButtonRef = useRef<HTMLButtonElement>(null);
 
+	const defaultSearch = params.get('search') || '';
+
 	const { handleSubmit, control } = useForm({
 		defaultValues: {
-			search: '',
+			search: defaultSearch,
 		},
 		resolver: yupResolver(searchSchema),
 	});
 
-	const [page, setPage] = useState(1);
+	const defaultPage = Number(params.get('page')) || 1;
+	const defaultField = params.get('field') || '';
+	const defaultPaymentFrom = Number(params.get('from')) || '';
+	const defaultPaymentTo = Number(params.get('to')) || '';
+
+	const [page, setPage] = useState(defaultPage);
 
 	const [filtersForm, setFiltersForm] = useState<FiltersForm>({
-		catalogues: '',
-		payment_from: '',
-		payment_to: '',
+		catalogues: defaultField,
+		payment_from: defaultPaymentFrom,
+		payment_to: defaultPaymentTo,
 	});
 
-	const [search, setSearch] = useState('');
+	const [search, setSearch] = useState(defaultSearch);
 
 	const { data: vacancies, isLoading: vacanciesLoading } = useQuery(
 		['vacancies', page, filtersForm, search],
@@ -83,6 +95,24 @@ const Vacancies = () => {
 
 		setButtonWidth(width);
 	}, []);
+
+	useEffect(() => {
+		const newSearchParams = new URLSearchParams();
+
+		const {
+			catalogues,
+			payment_from: paymentFrom,
+			payment_to: paymentTo,
+		} = filtersForm;
+
+		newSearchParams.append('page', page.toString());
+		if (catalogues) newSearchParams.append('field', catalogues);
+		if (paymentFrom) newSearchParams.append('from', paymentFrom.toString());
+		if (paymentTo) newSearchParams.append('to', paymentTo.toString());
+		if (search) newSearchParams.append('search', search);
+
+		navigate(`${pathname}?${newSearchParams.toString()}`);
+	}, [page, filtersForm, search]);
 
 	const totalPages =
 		typeof vacancies?.total === 'number'
