@@ -18,6 +18,7 @@ export const getVacancies = async (
 				payment_to: paymentTo,
 
 				keyword,
+				published: 1,
 			},
 		})
 		.then((res) => res.data);

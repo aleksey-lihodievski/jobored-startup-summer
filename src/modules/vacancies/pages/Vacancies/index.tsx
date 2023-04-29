@@ -114,10 +114,9 @@ const Vacancies = () => {
 		navigate(`${pathname}?${newSearchParams.toString()}`);
 	}, [page, filtersForm, search]);
 
-	const totalPages =
-		typeof vacancies?.total === 'number'
-			? Math.ceil(vacancies.total / 4)
-			: DEFAULT_PAGES;
+	const totalPages = vacancies?.total
+		? Math.ceil(vacancies.total / 4)
+		: DEFAULT_PAGES;
 
 	return (
 		<DefaultLayout>
@@ -149,6 +148,7 @@ const Vacancies = () => {
 									render={({ field }) => (
 										<Input
 											{...field}
+											data-elem="search-input"
 											size="lg"
 											placeholder="Введите название вакансии"
 											className={classes.searchInput}
@@ -157,6 +157,7 @@ const Vacancies = () => {
 											rightSection={
 												<Button
 													ref={searchButtonRef}
+													data-elem="search-button"
 													type="submit"
 													className={classes.inputButton}
 													size="xs"

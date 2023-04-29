@@ -125,6 +125,7 @@ const Filters: React.FC<FiltersProps> = ({
 						render={({ field }) => (
 							<Select
 								data={handledFields}
+								data-elem="industry-select"
 								{...field}
 								size="md"
 								placeholder="Выберите отрасль"
@@ -141,6 +142,7 @@ const Filters: React.FC<FiltersProps> = ({
 						name="payment_from"
 						render={({ field, fieldState }) => (
 							<NumberInput
+								data-elem="salary-from-input"
 								size="md"
 								placeholder="От"
 								error={fieldState.error ? fieldState.error.message : undefined}
@@ -156,6 +158,7 @@ const Filters: React.FC<FiltersProps> = ({
 						name="payment_to"
 						render={({ field, fieldState }) => (
 							<NumberInput
+								data-elem="salary-to-input"
 								size="md"
 								placeholder="До"
 								error={fieldState.error ? fieldState.error.message : undefined}

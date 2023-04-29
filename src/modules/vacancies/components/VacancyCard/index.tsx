@@ -55,7 +55,14 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 	}, [isFavorite, data]);
 
 	return (
-		<Paper component="article" p={23} pb={18} pt={17} withBorder>
+		<Paper
+			component="article"
+			p={23}
+			pb={18}
+			pt={17}
+			withBorder
+			data-elem={`vacancy-${data.id}`}
+		>
 			<Stack spacing={11}>
 				<Group position="apart" noWrap>
 					<Title order={2} className={classes.cardTitle}>
@@ -67,7 +74,11 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 							{profession}
 						</Anchor>
 					</Title>
-					<ActionIcon mt={3} onClick={toggleIsFavorite}>
+					<ActionIcon
+						mt={3}
+						onClick={toggleIsFavorite}
+						data-elem={`vacancy-${data.id}-shortlist-button`}
+					>
 						<img
 							src={isFavorite ? IconStarFilled : IconStar}
 							height={22}
