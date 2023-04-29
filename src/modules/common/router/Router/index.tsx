@@ -1,10 +1,11 @@
 import React, { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { DefaultLayout, DefaultLoader } from '@modules/common/components';
+import { DefaultLoader } from '@modules/common/components';
 
 const VacanciesRouter = React.lazy(() => import('@modules/vacancies/router'));
 const FavoritesRouter = React.lazy(() => import('@modules/favorites/router'));
+const NotFound = React.lazy(() => import('@modules/not-found/pages/NotFound'));
 
 const Router = () => {
 	return (
@@ -16,14 +17,7 @@ const Router = () => {
 
 				<Route path="/" element={<Navigate to="/vacancies" replace />} />
 
-				<Route
-					path="*"
-					element={
-						<DefaultLayout>
-							<div>not found</div>
-						</DefaultLayout>
-					}
-				/>
+				<Route path="*" element={<NotFound />} />
 			</Routes>
 		</Suspense>
 	);

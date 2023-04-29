@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
 import { VacancyCard } from '@modules/vacancies/components';
 import { getFavoriteVacancies } from '@modules/vacancies/services';
@@ -44,10 +45,12 @@ const Favorites = () => {
 		navigate(`${pathname}?${newSearchParams.toString()}`, { replace: true });
 	}, [page]);
 
+	const title = getPageTitle('Избранное');
+
 	return (
 		<DefaultLayout>
 			<Helmet>
-				<title>Избранное | Jobored</title>
+				<title>{title}</title>
 			</Helmet>
 			<DefaultContainer>
 				{hasVacancies ? (

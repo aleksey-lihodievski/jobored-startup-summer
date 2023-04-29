@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { IconSearch } from '@assets/icons';
 
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
 import { getVacancies } from '@modules/vacancies/api';
 import { getFields } from '@modules/vacancies/api/getFields';
@@ -118,17 +119,23 @@ const Vacancies = () => {
 		if (paymentTo) newSearchParams.append('to', paymentTo.toString());
 		if (search) newSearchParams.append('search', search);
 
-		navigate(`${pathname}?${newSearchParams.toString()}`, { replace: true });
+		navigate(`${pathname}?${newSearchParams.toString()}`);
 	}, [page, filtersForm, search]);
 
 	const totalPages = vacancies?.total
 		? Math.ceil(vacancies.total / 4)
 		: DEFAULT_PAGES;
 
+	const readyToDisplay = !vacanciesLoading && vacancies;
+
+	const noData = !vacanciesLoading && vacancies?.objects.length === 0;
+
+	const title = getPageTitle('Вакансии');
+
 	return (
 		<DefaultLayout>
 			<Helmet>
-				<title>Вакансии | Jobored</title>
+				<title>{title}</title>
 			</Helmet>
 			<DefaultContainer>
 				<MobileFilters
@@ -178,7 +185,7 @@ const Vacancies = () => {
 									control={control}
 								/>
 							</form>
-							{!vacanciesLoading && vacancies ? (
+							{readyToDisplay ? (
 								vacancies.objects.map((vacancy) => (
 									<VacancyCard key={vacancy.id} data={vacancy} />
 								))
@@ -190,9 +197,7 @@ const Vacancies = () => {
 									<VacancyCardSkeleton />
 								</>
 							)}
-							{!vacanciesLoading && vacancies?.objects.length === 0 && (
-								<NothingHere withButton={false} />
-							)}
+							{noData && <NothingHere withButton={false} />}
 						</Stack>
 						<Pagination
 							value={page}
