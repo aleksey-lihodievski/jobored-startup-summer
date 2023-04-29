@@ -4,7 +4,6 @@ const COLOR_INDEX = 5;
 
 export const useStyles = createStyles((theme) => ({
 	filterDesktop__wrapper: {
-		position: 'sticky',
 		padding: 20,
 		paddingTop: 14,
 		minWidth: 315,

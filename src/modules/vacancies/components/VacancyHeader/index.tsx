@@ -1,6 +1,5 @@
 import {
 	ActionIcon,
-	Anchor,
 	Breadcrumbs,
 	Group,
 	Paper,
@@ -9,7 +8,6 @@ import {
 	Title,
 } from '@mantine/core';
 import React, { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { IconGeolocation, IconStar, IconStarFilled } from '@assets/icons';
 
@@ -27,7 +25,7 @@ interface VacancyCardProps {
 	data: Vacancy;
 }
 
-const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
+const VacancyHeader: React.FC<VacancyCardProps> = ({ data }) => {
 	const { classes } = useStyles();
 
 	const {
@@ -55,24 +53,11 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 	}, [isFavorite, data]);
 
 	return (
-		<Paper
-			component="article"
-			p={23}
-			pb={18}
-			pt={17}
-			withBorder
-			data-elem={`vacancy-${data.id}`}
-		>
-			<Stack spacing={11}>
+		<Paper component="article" p={23} pb={18} pt={17} withBorder>
+			<Stack spacing={17}>
 				<Group position="apart" noWrap>
 					<Title order={2} className={classes.cardTitle}>
-						<Anchor
-							component={Link}
-							to={`/vacancies/${data.id}`}
-							className={classes.cardTitle__link}
-						>
-							{profession}
-						</Anchor>
+						{profession}
 					</Title>
 					<ActionIcon
 						mt={3}
@@ -92,7 +77,7 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 						className={classes.breadcrumbs}
 					>
 						<Text className={classes.compensation}>{compensation}</Text>
-						<Text>{workType}</Text>
+						<Text className={classes.workType}>{workType}</Text>
 					</Breadcrumbs>
 				</Group>
 				<Group spacing={12}>
@@ -104,5 +89,5 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 	);
 };
 
-export default VacancyCard;
-export { VacancyCardSkeleton } from './skeleton';
+export default VacancyHeader;
+export { VacancyHeaderSkeleton } from './skeleton';

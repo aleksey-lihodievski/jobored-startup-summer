@@ -1,24 +1,18 @@
-import { createStyles } from '@mantine/core';
+import { createStyles, rem } from '@mantine/core';
 
 export const useStyles = createStyles((theme) => ({
 	cardTitle: {
 		lineHeight: 1,
-	},
-
-	cardTitle__link: {
-		fontSize: 20,
-		lineHeight: 1,
-		fontWeight: 600,
-
-		wordBreak: 'break-word',
-
-		['.mantine-Anchor-root']: {
-			lineHeight: 1,
-		},
+		fontSize: rem(24),
 	},
 
 	compensation: {
+		fontSize: 20,
 		fontWeight: 700,
+	},
+
+	workType: {
+		fontSize: 20,
 	},
 
 	breadcrumbs: {

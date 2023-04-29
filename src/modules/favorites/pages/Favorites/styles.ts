@@ -5,4 +5,8 @@ export const useStyles = createStyles(() => ({
 		justifyContent: 'center',
 		marginTop: 104,
 	},
+
+	nothingHere: {
+		marginTop: 84,
+	},
 }));

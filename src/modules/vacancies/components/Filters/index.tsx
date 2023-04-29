@@ -33,6 +33,7 @@ const PAYMENT_STEP = 50;
 interface FiltersProps {
 	fields?: Catalogue[];
 	values?: FiltersForm;
+	sticky?: boolean;
 	onChange: (values: FiltersForm) => void;
 	className?: string;
 }
@@ -40,6 +41,7 @@ interface FiltersProps {
 const Filters: React.FC<FiltersProps> = ({
 	fields,
 	values = { catalogues: '', payment_from: '', payment_to: '' },
+	sticky,
 	onChange,
 	className,
 }) => {
@@ -98,7 +100,8 @@ const Filters: React.FC<FiltersProps> = ({
 			onSubmit={handleSubmit(onSubmit)}
 			component="form"
 			className={cx(className, classes.filterDesktop__wrapper)}
-			top={top}
+			pos={sticky ? 'sticky' : undefined}
+			top={sticky ? top : undefined}
 			withBorder
 		>
 			<Group position="apart">

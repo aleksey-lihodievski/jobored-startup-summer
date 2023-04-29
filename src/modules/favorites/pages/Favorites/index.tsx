@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
-import { NothingHere } from '@modules/favorites/components';
+import { NothingHere } from '@modules/not-found/components';
 import { VacancyCard } from '@modules/vacancies/components';
 import { getFavoriteVacancies } from '@modules/vacancies/services';
 
@@ -41,7 +41,7 @@ const Favorites = () => {
 
 		newSearchParams.append('page', page.toString());
 
-		navigate(`${pathname}?${newSearchParams.toString()}`);
+		navigate(`${pathname}?${newSearchParams.toString()}`, { replace: true });
 	}, [page]);
 
 	return (
@@ -65,7 +65,7 @@ const Favorites = () => {
 						/>
 					</>
 				) : (
-					<NothingHere />
+					<NothingHere className={classes.nothingHere} />
 				)}
 			</DefaultContainer>
 		</DefaultLayout>

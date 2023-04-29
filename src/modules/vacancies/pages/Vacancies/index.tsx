@@ -1,7 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Button, Group, Input, Pagination, Stack } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from 'react';
 import { Helmet } from 'react-helmet';
 import { Controller, useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -9,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { IconSearch } from '@assets/icons';
 
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { NothingHere } from '@modules/not-found/components';
 import { getVacancies } from '@modules/vacancies/api';
 import { getFields } from '@modules/vacancies/api/getFields';
 import {
@@ -89,7 +96,7 @@ const Vacancies = () => {
 		setFiltersForm(values);
 	}, []);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const buttonRect = searchButtonRef.current?.getBoundingClientRect();
 		const width = buttonRect ? buttonRect.width + INPUT_PADDING : 0;
 
@@ -111,7 +118,7 @@ const Vacancies = () => {
 		if (paymentTo) newSearchParams.append('to', paymentTo.toString());
 		if (search) newSearchParams.append('search', search);
 
-		navigate(`${pathname}?${newSearchParams.toString()}`);
+		navigate(`${pathname}?${newSearchParams.toString()}`, { replace: true });
 	}, [page, filtersForm, search]);
 
 	const totalPages = vacancies?.total
@@ -136,6 +143,7 @@ const Vacancies = () => {
 				>
 					<Filters
 						className={classes.hiddenTabletsAndBelow}
+						sticky
 						values={filtersForm}
 						fields={fields}
 						onChange={onChangeFilters}
@@ -181,6 +189,9 @@ const Vacancies = () => {
 									<VacancyCardSkeleton />
 									<VacancyCardSkeleton />
 								</>
+							)}
+							{!vacanciesLoading && vacancies?.objects.length === 0 && (
+								<NothingHere withButton={false} />
 							)}
 						</Stack>
 						<Pagination
