@@ -24,6 +24,7 @@ export const useStyles = createStyles((theme) => ({
 
 	pagination: {
 		justifyContent: 'center',
+		marginTop: 40,
 	},
 
 	hiddenDesktop: {

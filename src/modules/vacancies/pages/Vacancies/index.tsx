@@ -14,10 +14,10 @@ import { getFields } from '@modules/vacancies/api/getFields';
 import {
 	Filters,
 	FiltersForm,
+	MobileFilters,
 	VacancyCard,
+	VacancyCardSkeleton,
 } from '@modules/vacancies/components';
-import MobileFilters from '@modules/vacancies/components/MobileFilters';
-import { VacancyCardSkeleton } from '@modules/vacancies/components/VacancyCard';
 
 import { useStyles } from './styles';
 import { SearchForm } from './types';
@@ -25,7 +25,7 @@ import { searchSchema } from './validation';
 
 const INPUT_PADDING = 24;
 const DEFAULT_PAGES = 5;
-const PAGE_ITEMS = 5;
+const PAGE_ITEMS = 4;
 
 const Vacancies = () => {
 	const { search: urlSearchString, pathname } = useLocation();
@@ -171,15 +171,7 @@ const Vacancies = () => {
 							</form>
 							{!vacanciesLoading && vacancies ? (
 								vacancies.objects.map((vacancy) => (
-									<VacancyCard
-										key={vacancy.id}
-										jobTitle={vacancy.profession}
-										paymentFrom={vacancy.payment_from}
-										paymentTo={vacancy.payment_to}
-										currency={vacancy.currency}
-										workType={vacancy.type_of_work.title}
-										location={vacancy.town.title}
-									/>
+									<VacancyCard key={vacancy.id} data={vacancy} />
 								))
 							) : (
 								<>
@@ -195,7 +187,6 @@ const Vacancies = () => {
 							className={classes.pagination}
 							onChange={setPage}
 							total={totalPages}
-							mt={40}
 						/>
 					</Box>
 				</Group>

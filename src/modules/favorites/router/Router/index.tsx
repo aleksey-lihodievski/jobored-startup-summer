@@ -1,22 +1,14 @@
-import { Helmet } from 'react-helmet';
+import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { DefaultLayout } from '@modules/common/components';
+const Favorites = React.lazy(
+	() => import('@modules/favorites/pages/Favorites')
+);
 
 const Router = () => {
 	return (
 		<Routes>
-			<Route
-				path="/"
-				element={
-					<DefaultLayout>
-						<Helmet>
-							<title>Избранное | Jobored</title>
-						</Helmet>
-						<div>favorites</div>
-					</DefaultLayout>
-				}
-			/>
+			<Route path="/" element={<Favorites />} />
 			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
 	);
