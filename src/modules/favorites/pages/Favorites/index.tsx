@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { NothingHere } from '@modules/favorites/components';
 import { VacancyCard } from '@modules/vacancies/components';
 import { getFavoriteVacancies } from '@modules/vacancies/services';
 
@@ -17,6 +18,7 @@ const Favorites = () => {
 	const params = new URLSearchParams(search);
 
 	const vacancies = useMemo(() => getFavoriteVacancies(), []);
+	const hasVacancies = vacancies.length > 0;
 
 	const totalPages = Math.ceil(vacancies.length / PAGE_ITEMS);
 
@@ -48,17 +50,23 @@ const Favorites = () => {
 				<title>Избранное | Jobored</title>
 			</Helmet>
 			<DefaultContainer>
-				<Stack align="stretch">
-					{pageVacancies.map((vacancy) => (
-						<VacancyCard key={vacancy.id} data={vacancy} />
-					))}
-				</Stack>
-				<Pagination
-					value={page}
-					onChange={setPage}
-					total={totalPages}
-					className={classes.pagination}
-				/>
+				{hasVacancies ? (
+					<>
+						<Stack align="stretch">
+							{pageVacancies.map((vacancy) => (
+								<VacancyCard key={vacancy.id} data={vacancy} />
+							))}
+						</Stack>
+						<Pagination
+							value={page}
+							onChange={setPage}
+							total={totalPages}
+							className={classes.pagination}
+						/>
+					</>
+				) : (
+					<NothingHere />
+				)}
 			</DefaultContainer>
 		</DefaultLayout>
 	);
