@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { IconSearch } from '@assets/icons';
 
 import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
 import { getVacancies } from '@modules/vacancies/api';
 import { getFields } from '@modules/vacancies/api/getFields';
@@ -125,10 +126,12 @@ const Vacancies = () => {
 		? Math.ceil(vacancies.total / 4)
 		: DEFAULT_PAGES;
 
+	const title = getPageTitle('Вакансии');
+
 	return (
 		<DefaultLayout>
 			<Helmet>
-				<title>Вакансии | Jobored</title>
+				<title>{title}</title>
 			</Helmet>
 			<DefaultContainer>
 				<MobileFilters
