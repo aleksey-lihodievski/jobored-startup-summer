@@ -119,12 +119,16 @@ const Vacancies = () => {
 		if (paymentTo) newSearchParams.append('to', paymentTo.toString());
 		if (search) newSearchParams.append('search', search);
 
-		navigate(`${pathname}?${newSearchParams.toString()}`, { replace: true });
+		navigate(`${pathname}?${newSearchParams.toString()}`);
 	}, [page, filtersForm, search]);
 
 	const totalPages = vacancies?.total
 		? Math.ceil(vacancies.total / 4)
 		: DEFAULT_PAGES;
+
+	const readyToDisplay = !vacanciesLoading && vacancies;
+
+	const noData = !vacanciesLoading && vacancies?.objects.length === 0;
 
 	const title = getPageTitle('Вакансии');
 
@@ -181,7 +185,7 @@ const Vacancies = () => {
 									control={control}
 								/>
 							</form>
-							{!vacanciesLoading && vacancies ? (
+							{readyToDisplay ? (
 								vacancies.objects.map((vacancy) => (
 									<VacancyCard key={vacancy.id} data={vacancy} />
 								))
@@ -193,9 +197,7 @@ const Vacancies = () => {
 									<VacancyCardSkeleton />
 								</>
 							)}
-							{!vacanciesLoading && vacancies?.objects.length === 0 && (
-								<NothingHere withButton={false} />
-							)}
+							{noData && <NothingHere withButton={false} />}
 						</Stack>
 						<Pagination
 							value={page}

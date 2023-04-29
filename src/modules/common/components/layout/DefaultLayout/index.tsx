@@ -103,7 +103,7 @@ export function HeaderMenu() {
 				className={cx(classes.hiddenDesktop, classes.drawer)}
 				lockScroll={false}
 				closeButtonProps={{
-					size: '2rem',
+					size: 'xl',
 				}}
 			>
 				{links.map((link) => (

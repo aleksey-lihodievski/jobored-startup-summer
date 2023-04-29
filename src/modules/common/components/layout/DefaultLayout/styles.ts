@@ -35,7 +35,11 @@ export const useStyles = createStyles(
 				display: 'flex',
 				alignItems: 'center',
 				height: headerHeight,
-				padding: '0 16px',
+				padding: '0 12px',
+			},
+
+			['.mantine-Drawer-close']: {
+				color: theme.black,
 			},
 		},
 
