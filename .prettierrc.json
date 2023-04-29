@@ -9,9 +9,9 @@
 	"endOfLine": "lf",
 	"importOrder": [
 		"<THIRD_PARTY_MODULES>",
-		"^@/assets/(.*)$",
-		"^@/modules/(.*)$",
-		"^@/test/(.*)$",
+		"^@assets/(.*)$",
+		"^@modules/(.*)$",
+		"^@test/(.*)$",
 		"^[./]"
 	],
 	"importOrderSeparation": true,
