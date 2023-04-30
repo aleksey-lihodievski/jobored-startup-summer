@@ -23,8 +23,8 @@ const onRequest = async (
 ): Promise<InternalAxiosRequestConfig> => {
 	const accessToken = getToken(ACCESS_TOKEN_KEY);
 
-	if (accessToken && config?.headers) {
-		config.headers.Authorization = `Bearer ${accessToken}`;
+	if (config?.headers) {
+		if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
 		config.headers['x-secret-key'] = X_SECRET_KEY;
 		config.headers['X-Api-App-Id'] = CLIENT_SECRET_KEY;
 	}
@@ -43,9 +43,7 @@ const onResponse = async (response: AxiosResponse): Promise<AxiosResponse> => {
 const onResponseError = async (error: AxiosError): Promise<AxiosError> => {
 	if (
 		error.response &&
-		[HttpStatusCode.Unauthorized, HttpStatusCode.BadRequest].includes(
-			error.response.status
-		)
+		[HttpStatusCode.Unauthorized].includes(error.response.status)
 	) {
 		await loginUser();
 	}

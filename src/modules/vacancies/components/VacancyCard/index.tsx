@@ -81,7 +81,7 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 					>
 						<img
 							src={isFavorite ? IconStarFilled : IconStar}
-							height={22}
+							className={classes.startIcon}
 							alt="Star icon"
 						/>
 					</ActionIcon>
@@ -96,7 +96,7 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 					</Breadcrumbs>
 				</Group>
 				<Group spacing={12}>
-					<img src={IconGeolocation} alt="" />
+					<img src={IconGeolocation} alt="" className={classes.locationIcon} />
 					<Text className={classes.location}>{location}</Text>
 				</Group>
 			</Stack>
@@ -104,5 +104,5 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 	);
 };
 
-export default VacancyCard;
+export default React.memo(VacancyCard);
 export { VacancyCardSkeleton } from './skeleton';

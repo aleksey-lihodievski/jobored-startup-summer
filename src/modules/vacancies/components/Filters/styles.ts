@@ -23,9 +23,21 @@ export const useStyles = createStyles((theme) => ({
 		fontWeight: 500,
 	},
 
+	filters__select: {
+		['.mantine-Select-rightSection']: {
+			pointerEvents: 'none',
+		},
+	},
+
 	closeIcon: {
+		width: 16,
+		height: 16,
 		marginLeft: '5px',
-		marginBottom: '-2px',
+	},
+
+	chevronDownIcon: {
+		width: 16,
+		height: 8,
 	},
 
 	numberInput: {

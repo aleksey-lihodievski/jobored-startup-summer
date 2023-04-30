@@ -29,6 +29,16 @@ export const useStyles = createStyles((theme) => ({
 		fontSize: 16,
 	},
 
+	startIcon: {
+		width: 22,
+		height: 22,
+	},
+
+	locationIcon: {
+		width: 16,
+		height: 18,
+	},
+
 	separator: {
 		width: 5,
 		height: 5,

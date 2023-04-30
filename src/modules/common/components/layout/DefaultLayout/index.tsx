@@ -5,6 +5,7 @@ import {
 	Group,
 	Header,
 	ScrollArea,
+	Styles,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import React, { useCallback, useEffect } from 'react';
@@ -65,7 +66,11 @@ export function HeaderMenu() {
 					<Group position="apart" className={classes.header__layout}>
 						<Group className={classes.fullHeight}>
 							<Link to="/">
-								<img src={LogoFull} alt="Jobored Logo" />
+								<img
+									src={LogoFull}
+									alt="Jobored Logo"
+									className={classes.header__logo}
+								/>
 							</Link>
 						</Group>
 
@@ -85,7 +90,7 @@ export function HeaderMenu() {
 						</Group>
 
 						<Burger
-							opened={drawerOpen}
+							opened={false}
 							onClick={toggleDrawer}
 							className={cx(classes.hiddenDesktop, classes.header__burger)}
 						/>
@@ -100,6 +105,7 @@ export function HeaderMenu() {
 				padding="md"
 				size="100%"
 				scrollAreaComponent={ScrollArea.Autosize}
+				overlayProps={{ opacity: 0, blur: 4 }}
 				className={cx(classes.hiddenDesktop, classes.drawer)}
 				lockScroll={false}
 				closeButtonProps={{
@@ -120,18 +126,19 @@ export function HeaderMenu() {
 	);
 }
 
+const defaultStyles: Styles<
+	'body' | 'main' | 'root',
+	Record<string, unknown>
+> = (theme) => ({
+	main: {
+		backgroundColor: theme.colors.gray[0],
+		paddingTop: '7.5rem',
+	},
+});
+
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
 	return (
-		<AppShell
-			fixed
-			header={<HeaderMenu />}
-			styles={(theme) => ({
-				main: {
-					backgroundColor: theme.colors.gray[0],
-					paddingTop: '7.5rem',
-				},
-			})}
-		>
+		<AppShell fixed header={<HeaderMenu />} styles={defaultStyles}>
 			{children}
 		</AppShell>
 	);

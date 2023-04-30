@@ -19,6 +19,7 @@ export const getVacancies = async (
 
 				keyword,
 				published: 1,
+				no_agreement: 1,
 			},
 		})
 		.then((res) => res.data);

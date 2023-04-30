@@ -3,7 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { DefaultContainer } from '@modules/common/components';
+import { getPaginationControlProps } from '@modules/common/helpers';
 import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
 import { VacancyCard } from '@modules/vacancies/components';
@@ -48,30 +49,29 @@ const Favorites = () => {
 	const title = getPageTitle('Избранное');
 
 	return (
-		<DefaultLayout>
+		<DefaultContainer>
 			<Helmet>
 				<title>{title}</title>
 			</Helmet>
-			<DefaultContainer>
-				{hasVacancies ? (
-					<>
-						<Stack align="stretch">
-							{pageVacancies.map((vacancy) => (
-								<VacancyCard key={vacancy.id} data={vacancy} />
-							))}
-						</Stack>
-						<Pagination
-							value={page}
-							onChange={setPage}
-							total={totalPages}
-							className={classes.pagination}
-						/>
-					</>
-				) : (
-					<NothingHere className={classes.nothingHere} />
-				)}
-			</DefaultContainer>
-		</DefaultLayout>
+			{hasVacancies ? (
+				<>
+					<Stack align="stretch">
+						{pageVacancies.map((vacancy) => (
+							<VacancyCard key={vacancy.id} data={vacancy} />
+						))}
+					</Stack>
+					<Pagination
+						value={page}
+						onChange={setPage}
+						total={totalPages}
+						className={classes.pagination}
+						getControlProps={getPaginationControlProps}
+					/>
+				</>
+			) : (
+				<NothingHere className={classes.nothingHere} />
+			)}
+		</DefaultContainer>
 	);
 };
 

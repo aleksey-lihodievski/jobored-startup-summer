@@ -30,6 +30,11 @@ export const useStyles = createStyles(
 			gridColumn: -1,
 		},
 
+		header__logo: {
+			height: '100%',
+			aspectRatio: '141 / 36',
+		},
+
 		drawer: {
 			['& .mantine-Drawer-header']: {
 				display: 'flex',

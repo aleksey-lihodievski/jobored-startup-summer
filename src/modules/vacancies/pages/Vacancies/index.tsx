@@ -14,11 +14,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { IconSearch } from '@assets/icons';
 
-import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { DefaultContainer } from '@modules/common/components';
+import { getPaginationControlProps } from '@modules/common/helpers';
 import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
-import { getVacancies } from '@modules/vacancies/api';
-import { getFields } from '@modules/vacancies/api/getFields';
+import { getFields, getVacancies } from '@modules/vacancies/api';
 import {
 	Filters,
 	FiltersForm,
@@ -34,6 +34,8 @@ import { searchSchema } from './validation';
 const INPUT_PADDING = 24;
 const DEFAULT_PAGES = 5;
 const PAGE_ITEMS = 4;
+const SEARCH_ICON_WIDTH = 13;
+const SEARCH_ICON_X_PADDINGS = 23;
 
 const Vacancies = () => {
 	const { search: urlSearchString, pathname } = useLocation();
@@ -42,7 +44,9 @@ const Vacancies = () => {
 
 	const [buttonWidth, setButtonWidth] = useState<number>();
 
-	const { classes } = useStyles();
+	const { classes } = useStyles({
+		iconSectionWidth: SEARCH_ICON_WIDTH + SEARCH_ICON_X_PADDINGS,
+	});
 
 	const searchButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -133,82 +137,84 @@ const Vacancies = () => {
 	const title = getPageTitle('Вакансии');
 
 	return (
-		<DefaultLayout>
+		<DefaultContainer>
 			<Helmet>
 				<title>{title}</title>
 			</Helmet>
-			<DefaultContainer>
-				<MobileFilters
+			<MobileFilters
+				values={filtersForm}
+				fields={fields}
+				onChange={onChangeFilters}
+			/>
+			<Group className={classes.columnsWrapper} align="flex-start" spacing={28}>
+				<Filters
+					className={classes.hiddenTabletsAndBelow}
+					sticky
 					values={filtersForm}
 					fields={fields}
 					onChange={onChangeFilters}
 				/>
-				<Group
-					className={classes.columnsWrapper}
-					align="flex-start"
-					spacing={28}
-				>
-					<Filters
-						className={classes.hiddenTabletsAndBelow}
-						sticky
-						values={filtersForm}
-						fields={fields}
-						onChange={onChangeFilters}
+				<Box className={classes.flex1}>
+					<Stack align="stretch" className={classes.flex1}>
+						<form onSubmit={handleSubmit(onChangeSearch)}>
+							<Controller
+								name="search"
+								render={({ field }) => (
+									<Input
+										{...field}
+										data-elem="search-input"
+										size="lg"
+										placeholder="Введите название вакансии"
+										className={classes.searchInput}
+										icon={
+											<img
+												src={IconSearch}
+												alt=""
+												className={classes.searchIcon}
+											/>
+										}
+										iconWidth={SEARCH_ICON_WIDTH + SEARCH_ICON_X_PADDINGS}
+										rightSectionWidth={buttonWidth}
+										rightSection={
+											<Button
+												ref={searchButtonRef}
+												data-elem="search-button"
+												type="submit"
+												className={classes.inputButton}
+												size="xs"
+											>
+												Поиск
+											</Button>
+										}
+									/>
+								)}
+								control={control}
+							/>
+						</form>
+						{readyToDisplay ? (
+							vacancies.objects.map((vacancy) => (
+								<VacancyCard key={vacancy.id} data={vacancy} />
+							))
+						) : (
+							<>
+								<VacancyCardSkeleton />
+								<VacancyCardSkeleton />
+								<VacancyCardSkeleton />
+								<VacancyCardSkeleton />
+							</>
+						)}
+						{noData && <NothingHere withButton={false} />}
+					</Stack>
+					<Pagination
+						value={page}
+						className={classes.pagination}
+						onChange={setPage}
+						total={totalPages}
+						getControlProps={getPaginationControlProps}
 					/>
-					<Box className={classes.flex1}>
-						<Stack align="stretch" className={classes.flex1}>
-							<form onSubmit={handleSubmit(onChangeSearch)}>
-								<Controller
-									name="search"
-									render={({ field }) => (
-										<Input
-											{...field}
-											data-elem="search-input"
-											size="lg"
-											placeholder="Введите название вакансии"
-											className={classes.searchInput}
-											icon={<img src={IconSearch} alt="" />}
-											rightSectionWidth={buttonWidth}
-											rightSection={
-												<Button
-													ref={searchButtonRef}
-													data-elem="search-button"
-													type="submit"
-													className={classes.inputButton}
-													size="xs"
-												>
-													Поиск
-												</Button>
-											}
-										/>
-									)}
-									control={control}
-								/>
-							</form>
-							{readyToDisplay ? (
-								vacancies.objects.map((vacancy) => (
-									<VacancyCard key={vacancy.id} data={vacancy} />
-								))
-							) : (
-								<>
-									<VacancyCardSkeleton />
-									<VacancyCardSkeleton />
-									<VacancyCardSkeleton />
-									<VacancyCardSkeleton />
-								</>
-							)}
-							{noData && <NothingHere withButton={false} />}
-						</Stack>
-						<Pagination
-							value={page}
-							className={classes.pagination}
-							onChange={setPage}
-							total={totalPages}
-						/>
-					</Box>
-				</Group>
-			</DefaultContainer>
-		</DefaultLayout>
+				</Box>
+			</Group>
+		</DefaultContainer>
 	);
 };
 

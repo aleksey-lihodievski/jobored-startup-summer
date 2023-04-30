@@ -132,8 +132,14 @@ const Filters: React.FC<FiltersProps> = ({
 								{...field}
 								size="md"
 								placeholder="Выберите отрасль"
-								rightSection={<img src={IconChevronDown} alt="" />}
-								styles={{ rightSection: { pointerEvents: 'none' } }}
+								className={classes.filters__select}
+								rightSection={
+									<img
+										src={IconChevronDown}
+										alt=""
+										className={classes.chevronDownIcon}
+									/>
+								}
 							/>
 						)}
 						control={control}
@@ -181,6 +187,6 @@ const Filters: React.FC<FiltersProps> = ({
 	);
 };
 
-export default Filters;
+export default React.memo(Filters);
 
 export * from './types';
