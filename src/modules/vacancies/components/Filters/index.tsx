@@ -181,6 +181,6 @@ const Filters: React.FC<FiltersProps> = ({
 	);
 };
 
-export default Filters;
+export default React.memo(Filters);
 
 export * from './types';

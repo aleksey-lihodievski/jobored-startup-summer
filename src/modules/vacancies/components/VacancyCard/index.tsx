@@ -104,5 +104,5 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 	);
 };
 
-export default VacancyCard;
+export default React.memo(VacancyCard);
 export { VacancyCardSkeleton } from './skeleton';

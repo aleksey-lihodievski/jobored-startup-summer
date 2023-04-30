@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { IconSearch } from '@assets/icons';
 
-import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { DefaultContainer } from '@modules/common/components';
 import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
 import { getVacancies } from '@modules/vacancies/api';
@@ -133,82 +133,76 @@ const Vacancies = () => {
 	const title = getPageTitle('Вакансии');
 
 	return (
-		<DefaultLayout>
+		<DefaultContainer>
 			<Helmet>
 				<title>{title}</title>
 			</Helmet>
-			<DefaultContainer>
-				<MobileFilters
+			<MobileFilters
+				values={filtersForm}
+				fields={fields}
+				onChange={onChangeFilters}
+			/>
+			<Group className={classes.columnsWrapper} align="flex-start" spacing={28}>
+				<Filters
+					className={classes.hiddenTabletsAndBelow}
+					sticky
 					values={filtersForm}
 					fields={fields}
 					onChange={onChangeFilters}
 				/>
-				<Group
-					className={classes.columnsWrapper}
-					align="flex-start"
-					spacing={28}
-				>
-					<Filters
-						className={classes.hiddenTabletsAndBelow}
-						sticky
-						values={filtersForm}
-						fields={fields}
-						onChange={onChangeFilters}
+				<Box className={classes.flex1}>
+					<Stack align="stretch" className={classes.flex1}>
+						<form onSubmit={handleSubmit(onChangeSearch)}>
+							<Controller
+								name="search"
+								render={({ field }) => (
+									<Input
+										{...field}
+										data-elem="search-input"
+										size="lg"
+										placeholder="Введите название вакансии"
+										className={classes.searchInput}
+										icon={<img src={IconSearch} alt="" />}
+										rightSectionWidth={buttonWidth}
+										rightSection={
+											<Button
+												ref={searchButtonRef}
+												data-elem="search-button"
+												type="submit"
+												className={classes.inputButton}
+												size="xs"
+											>
+												Поиск
+											</Button>
+										}
+									/>
+								)}
+								control={control}
+							/>
+						</form>
+						{readyToDisplay ? (
+							vacancies.objects.map((vacancy) => (
+								<VacancyCard key={vacancy.id} data={vacancy} />
+							))
+						) : (
+							<>
+								<VacancyCardSkeleton />
+								<VacancyCardSkeleton />
+								<VacancyCardSkeleton />
+								<VacancyCardSkeleton />
+							</>
+						)}
+						{noData && <NothingHere withButton={false} />}
+					</Stack>
+					<Pagination
+						value={page}
+						className={classes.pagination}
+						onChange={setPage}
+						total={totalPages}
 					/>
-					<Box className={classes.flex1}>
-						<Stack align="stretch" className={classes.flex1}>
-							<form onSubmit={handleSubmit(onChangeSearch)}>
-								<Controller
-									name="search"
-									render={({ field }) => (
-										<Input
-											{...field}
-											data-elem="search-input"
-											size="lg"
-											placeholder="Введите название вакансии"
-											className={classes.searchInput}
-											icon={<img src={IconSearch} alt="" />}
-											rightSectionWidth={buttonWidth}
-											rightSection={
-												<Button
-													ref={searchButtonRef}
-													data-elem="search-button"
-													type="submit"
-													className={classes.inputButton}
-													size="xs"
-												>
-													Поиск
-												</Button>
-											}
-										/>
-									)}
-									control={control}
-								/>
-							</form>
-							{readyToDisplay ? (
-								vacancies.objects.map((vacancy) => (
-									<VacancyCard key={vacancy.id} data={vacancy} />
-								))
-							) : (
-								<>
-									<VacancyCardSkeleton />
-									<VacancyCardSkeleton />
-									<VacancyCardSkeleton />
-									<VacancyCardSkeleton />
-								</>
-							)}
-							{noData && <NothingHere withButton={false} />}
-						</Stack>
-						<Pagination
-							value={page}
-							className={classes.pagination}
-							onChange={setPage}
-							total={totalPages}
-						/>
-					</Box>
-				</Group>
-			</DefaultContainer>
-		</DefaultLayout>
+				</Box>
+			</Group>
+		</DefaultContainer>
 	);
 };
 

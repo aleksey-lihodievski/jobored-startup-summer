@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet';
 
-import { DefaultContainer, DefaultLayout } from '@modules/common/components';
+import { DefaultContainer } from '@modules/common/components';
 import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
 
@@ -12,14 +12,12 @@ const NotFound = () => {
 	const title = getPageTitle('Здесь ничего нет');
 
 	return (
-		<DefaultLayout>
+		<DefaultContainer>
 			<Helmet>
 				<title>{title}</title>
 			</Helmet>
-			<DefaultContainer>
-				<NothingHere className={classes.nothingHere} />
-			</DefaultContainer>
-		</DefaultLayout>
+			<NothingHere className={classes.nothingHere} />
+		</DefaultContainer>
 	);
 };
 
