@@ -15,10 +15,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { IconSearch } from '@assets/icons';
 
 import { DefaultContainer } from '@modules/common/components';
+import { getPaginationControlProps } from '@modules/common/helpers';
 import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
-import { getVacancies } from '@modules/vacancies/api';
-import { getFields } from '@modules/vacancies/api/getFields';
+import { getFields, getVacancies } from '@modules/vacancies/api';
 import {
 	Filters,
 	FiltersForm,
@@ -34,6 +34,8 @@ import { searchSchema } from './validation';
 const INPUT_PADDING = 24;
 const DEFAULT_PAGES = 5;
 const PAGE_ITEMS = 4;
+const SEARCH_ICON_WIDTH = 13;
+const SEARCH_ICON_X_PADDINGS = 23;
 
 const Vacancies = () => {
 	const { search: urlSearchString, pathname } = useLocation();
@@ -42,7 +44,9 @@ const Vacancies = () => {
 
 	const [buttonWidth, setButtonWidth] = useState<number>();
 
-	const { classes } = useStyles();
+	const { classes } = useStyles({
+		iconSectionWidth: SEARCH_ICON_WIDTH + SEARCH_ICON_X_PADDINGS,
+	});
 
 	const searchButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -162,7 +166,14 @@ const Vacancies = () => {
 										size="lg"
 										placeholder="Введите название вакансии"
 										className={classes.searchInput}
-										icon={<img src={IconSearch} alt="" />}
+										icon={
+											<img
+												src={IconSearch}
+												alt=""
+												className={classes.searchIcon}
+											/>
+										}
+										iconWidth={SEARCH_ICON_WIDTH + SEARCH_ICON_X_PADDINGS}
 										rightSectionWidth={buttonWidth}
 										rightSection={
 											<Button
@@ -199,6 +210,7 @@ const Vacancies = () => {
 						className={classes.pagination}
 						onChange={setPage}
 						total={totalPages}
+						getControlProps={getPaginationControlProps}
 					/>
 				</Box>
 			</Group>

@@ -19,7 +19,12 @@ const NothingHere: React.FC<NothingHereProps> = ({
 
 	return (
 		<Stack spacing={32} align="center" className={className}>
-			<img src={ImgNotFound} alt="Man with a loupe" className={classes.image} />
+			<img
+				src={ImgNotFound}
+				alt="Man with a loupe"
+				height="100%"
+				className={classes.image}
+			/>
 			<Title className={classes.title}>Упс, здесь еще ничего нет!</Title>
 			{withButton && (
 				<Button

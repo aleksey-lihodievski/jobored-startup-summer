@@ -66,7 +66,11 @@ export function HeaderMenu() {
 					<Group position="apart" className={classes.header__layout}>
 						<Group className={classes.fullHeight}>
 							<Link to="/">
-								<img src={LogoFull} alt="Jobored Logo" />
+								<img
+									src={LogoFull}
+									alt="Jobored Logo"
+									className={classes.header__logo}
+								/>
 							</Link>
 						</Group>
 
@@ -86,7 +90,7 @@ export function HeaderMenu() {
 						</Group>
 
 						<Burger
-							opened={drawerOpen}
+							opened={false}
 							onClick={toggleDrawer}
 							className={cx(classes.hiddenDesktop, classes.header__burger)}
 						/>
@@ -101,6 +105,7 @@ export function HeaderMenu() {
 				padding="md"
 				size="100%"
 				scrollAreaComponent={ScrollArea.Autosize}
+				overlayProps={{ opacity: 0, blur: 4 }}
 				className={cx(classes.hiddenDesktop, classes.drawer)}
 				lockScroll={false}
 				closeButtonProps={{

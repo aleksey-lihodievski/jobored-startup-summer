@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { DefaultContainer } from '@modules/common/components';
+import { getPaginationControlProps } from '@modules/common/helpers';
 import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
 import { VacancyCard } from '@modules/vacancies/components';
@@ -64,6 +65,7 @@ const Favorites = () => {
 						onChange={setPage}
 						total={totalPages}
 						className={classes.pagination}
+						getControlProps={getPaginationControlProps}
 					/>
 				</>
 			) : (
