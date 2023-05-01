@@ -13,6 +13,7 @@ import { getFavoriteVacancies } from '@modules/vacancies/services';
 import { useStyles } from './styles';
 
 const PAGE_ITEMS = 4;
+const PARAM_PAGE = 'page';
 
 const Favorites = () => {
 	const { pathname, search } = useLocation();
@@ -24,8 +25,8 @@ const Favorites = () => {
 
 	const totalPages = Math.ceil(vacancies.length / PAGE_ITEMS);
 
-	const page = Number(params.get('page'))
-		? Math.min(Number(params.get('page')), totalPages)
+	const page = Number(params.get(PARAM_PAGE))
+		? Math.min(Number(params.get(PARAM_PAGE)), totalPages)
 		: 1;
 
 	const pageIdx = page - 1;
@@ -40,7 +41,7 @@ const Favorites = () => {
 	const onChangePage = useCallback(
 		(newPage: number) => {
 			const newParams = new URLSearchParams(search);
-			newParams.set('page', newPage.toString());
+			newParams.set(PARAM_PAGE, newPage.toString());
 			navigate(`${pathname}?${newParams.toString()}`);
 		},
 		[pathname, search]
@@ -49,7 +50,7 @@ const Favorites = () => {
 	useEffect(() => {
 		const newParams = new URLSearchParams();
 
-		newParams.append('page', page.toString());
+		newParams.append(PARAM_PAGE, page.toString());
 
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
 	}, []);
