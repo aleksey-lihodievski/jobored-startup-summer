@@ -37,6 +37,12 @@ const PAGE_ITEMS = 4;
 const SEARCH_ICON_WIDTH = 13;
 const SEARCH_ICON_X_PADDINGS = 23;
 
+const PARAM_PAGE = 'page';
+const PARAM_SEARCH = 'search';
+const PARAM_FIELD = 'field';
+const PARAM_FROM = 'from';
+const PARAM_TO = 'to';
+
 const Vacancies = () => {
 	const { search: urlSearchString, pathname } = useLocation();
 	const params = new URLSearchParams(urlSearchString);
@@ -50,7 +56,7 @@ const Vacancies = () => {
 
 	const searchButtonRef = useRef<HTMLButtonElement>(null);
 
-	const search = params.get('search') || '';
+	const search = params.get(PARAM_SEARCH) || '';
 
 	const { handleSubmit, control, reset } = useForm({
 		defaultValues: {
@@ -59,10 +65,10 @@ const Vacancies = () => {
 		resolver: yupResolver(searchSchema),
 	});
 
-	const page = Number(params.get('page')) || 1;
-	const catalogue = params.get('field') || '';
-	const paymentFrom = Number(params.get('from')) || '';
-	const paymentTo = Number(params.get('to')) || '';
+	const page = Number(params.get(PARAM_PAGE)) || 1;
+	const catalogue = params.get(PARAM_FIELD) || '';
+	const paymentFrom = Number(params.get(PARAM_FROM)) || '';
+	const paymentTo = Number(params.get(PARAM_TO)) || '';
 
 	const filtersForm = {
 		catalogues: catalogue,
@@ -92,7 +98,9 @@ const Vacancies = () => {
 	const onChangeSearch = useCallback(
 		(values: SearchForm) => {
 			const newParams = new URLSearchParams(urlSearchString);
-			newParams.set('search', values.search);
+			newParams.delete(PARAM_SEARCH);
+
+			if (values.search) newParams.set(PARAM_SEARCH, values.search);
 			navigate(`${pathname}?${newParams.toString()}`);
 		},
 		[pathname, urlSearchString]
@@ -102,14 +110,15 @@ const Vacancies = () => {
 		(values: FiltersForm) => {
 			const newParams = new URLSearchParams(urlSearchString);
 
-			newParams.delete('field');
-			newParams.delete('from');
-			newParams.delete('to');
+			newParams.delete(PARAM_FIELD);
+			newParams.delete(PARAM_FROM);
+			newParams.delete(PARAM_TO);
 
-			if (values.catalogues) newParams.set('field', values.catalogues);
+			if (values.catalogues) newParams.set(PARAM_FIELD, values.catalogues);
 			if (values.payment_from)
-				newParams.set('from', values.payment_from.toString());
-			if (values.payment_to) newParams.set('to', values.payment_to.toString());
+				newParams.set(PARAM_FROM, values.payment_from.toString());
+			if (values.payment_to)
+				newParams.set(PARAM_TO, values.payment_to.toString());
 
 			navigate(`${pathname}?${newParams.toString()}`);
 		},
@@ -119,7 +128,7 @@ const Vacancies = () => {
 	const onChangePage = useCallback(
 		(newPage: number) => {
 			const newParams = new URLSearchParams(urlSearchString);
-			newParams.set('page', newPage.toString());
+			newParams.set(PARAM_PAGE, newPage.toString());
 			navigate(`${pathname}?${newParams.toString()}`);
 		},
 		[pathname, urlSearchString]
@@ -135,11 +144,11 @@ const Vacancies = () => {
 	useEffect(() => {
 		const newParams = new URLSearchParams();
 
-		newParams.append('page', page.toString());
-		if (catalogue) newParams.append('field', catalogue);
-		if (paymentFrom) newParams.append('from', paymentFrom.toString());
-		if (paymentTo) newParams.append('to', paymentTo.toString());
-		if (search) newParams.append('search', search);
+		newParams.append(PARAM_PAGE, page.toString());
+		if (catalogue) newParams.append(PARAM_FIELD, catalogue);
+		if (paymentFrom) newParams.append(PARAM_FROM, paymentFrom.toString());
+		if (paymentTo) newParams.append(PARAM_TO, paymentTo.toString());
+		if (search) newParams.append(PARAM_SEARCH, search);
 		reset({ search });
 
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
@@ -147,7 +156,7 @@ const Vacancies = () => {
 
 	useEffect(() => {
 		const searchParams = new URLSearchParams(urlSearchString);
-		const pageSearch = searchParams.get('search') || '';
+		const pageSearch = searchParams.get(PARAM_SEARCH) || '';
 
 		reset({ search: pageSearch });
 	}, [urlSearchString]);
