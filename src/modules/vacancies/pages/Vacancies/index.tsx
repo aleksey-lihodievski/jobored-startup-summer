@@ -70,11 +70,11 @@ const Vacancies = () => {
 	const paymentFrom = Number(params.get(PARAM_FROM)) || '';
 	const paymentTo = Number(params.get(PARAM_TO)) || '';
 
-	const filtersForm = {
+	const [filtersForm, setFiltersForm] = useState<FiltersForm>({
 		catalogues: catalogue,
 		payment_from: paymentFrom,
 		payment_to: paymentTo,
-	} as const;
+	});
 
 	const { data: vacancies, isLoading: vacanciesLoading } = useQuery(
 		['vacancies', page, filtersForm, search],
@@ -119,6 +119,13 @@ const Vacancies = () => {
 				newParams.set(PARAM_FROM, values.payment_from.toString());
 			if (values.payment_to)
 				newParams.set(PARAM_TO, values.payment_to.toString());
+
+			setFiltersForm((filters) => ({
+				...filters,
+				...(values.catalogues ? { catalogues: values.catalogues } : {}),
+				...(values.payment_from ? { payment_from: values.payment_from } : {}),
+				...(values.payment_to ? { payment_to: values.payment_to } : {}),
+			}));
 
 			navigate(`${pathname}?${newParams.toString()}`);
 		},

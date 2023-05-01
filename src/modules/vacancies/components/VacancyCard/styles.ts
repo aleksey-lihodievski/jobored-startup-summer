@@ -1,4 +1,4 @@
-import { createStyles } from '@mantine/core';
+import { createStyles, rem } from '@mantine/core';
 
 export const useStyles = createStyles((theme) => ({
 	cardTitle: {
@@ -6,7 +6,7 @@ export const useStyles = createStyles((theme) => ({
 	},
 
 	cardTitle__link: {
-		fontSize: 20,
+		fontSize: rem(20),
 		lineHeight: 1,
 		fontWeight: 600,
 
@@ -14,6 +14,10 @@ export const useStyles = createStyles((theme) => ({
 
 		['.mantine-Anchor-root']: {
 			lineHeight: 1,
+		},
+
+		[theme.fn.smallerThan('lg')]: {
+			fontSize: rem(18),
 		},
 	},
 
@@ -23,10 +27,20 @@ export const useStyles = createStyles((theme) => ({
 
 	breadcrumbs: {
 		flexWrap: 'wrap',
+
+		[theme.fn.smallerThan('md')]: {
+			['.mantine-Breadcrumbs-separator']: {
+				display: 'none',
+			},
+
+			flexDirection: 'column',
+			alignItems: 'flex-start',
+			gap: 11,
+		},
 	},
 
 	location: {
-		fontSize: 16,
+		fontSize: rem(16),
 	},
 
 	startIcon: {
@@ -51,6 +65,16 @@ export const useStyles = createStyles((theme) => ({
 		display: 'flex',
 		width: '100%',
 		maxWidth: '500px',
+
+		[theme.fn.smallerThan('md')]: {
+			['.mantine-Breadcrumbs-separator']: {
+				display: 'none',
+			},
+
+			flexDirection: 'column',
+			alignItems: 'flex-start',
+			gap: 11,
+		},
 	},
 
 	skeletonLocation: {
