@@ -1,5 +1,5 @@
 import { Pagination, Stack } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -24,10 +24,9 @@ const Favorites = () => {
 
 	const totalPages = Math.ceil(vacancies.length / PAGE_ITEMS);
 
-	const defaultPage = Number(params.get('page'))
+	const page = Number(params.get('page'))
 		? Math.min(Number(params.get('page')), totalPages)
 		: 1;
-	const [page, setPage] = useState(defaultPage);
 
 	const pageIdx = page - 1;
 
@@ -38,13 +37,22 @@ const Favorites = () => {
 
 	const { classes } = useStyles();
 
+	const onChangePage = useCallback(
+		(newPage: number) => {
+			const newParams = new URLSearchParams(search);
+			newParams.set('page', newPage.toString());
+			navigate(`${pathname}?${newParams.toString()}`);
+		},
+		[pathname, search]
+	);
+
 	useEffect(() => {
-		const newSearchParams = new URLSearchParams();
+		const newParams = new URLSearchParams();
 
-		newSearchParams.append('page', page.toString());
+		newParams.append('page', page.toString());
 
-		navigate(`${pathname}?${newSearchParams.toString()}`, { replace: true });
-	}, [page]);
+		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
+	}, []);
 
 	const title = getPageTitle('Избранное');
 
@@ -62,7 +70,7 @@ const Favorites = () => {
 					</Stack>
 					<Pagination
 						value={page}
-						onChange={setPage}
+						onChange={onChangePage}
 						total={totalPages}
 						className={classes.pagination}
 						getControlProps={getPaginationControlProps}

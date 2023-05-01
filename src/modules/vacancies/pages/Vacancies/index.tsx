@@ -50,29 +50,25 @@ const Vacancies = () => {
 
 	const searchButtonRef = useRef<HTMLButtonElement>(null);
 
-	const defaultSearch = params.get('search') || '';
+	const search = params.get('search') || '';
 
-	const { handleSubmit, control } = useForm({
+	const { handleSubmit, control, reset } = useForm({
 		defaultValues: {
-			search: defaultSearch,
+			search,
 		},
 		resolver: yupResolver(searchSchema),
 	});
 
-	const defaultPage = Number(params.get('page')) || 1;
-	const defaultField = params.get('field') || '';
-	const defaultPaymentFrom = Number(params.get('from')) || '';
-	const defaultPaymentTo = Number(params.get('to')) || '';
+	const page = Number(params.get('page')) || 1;
+	const catalogue = params.get('field') || '';
+	const paymentFrom = Number(params.get('from')) || '';
+	const paymentTo = Number(params.get('to')) || '';
 
-	const [page, setPage] = useState(defaultPage);
-
-	const [filtersForm, setFiltersForm] = useState<FiltersForm>({
-		catalogues: defaultField,
-		payment_from: defaultPaymentFrom,
-		payment_to: defaultPaymentTo,
-	});
-
-	const [search, setSearch] = useState(defaultSearch);
+	const filtersForm = {
+		catalogues: catalogue,
+		payment_from: paymentFrom,
+		payment_to: paymentTo,
+	} as const;
 
 	const { data: vacancies, isLoading: vacanciesLoading } = useQuery(
 		['vacancies', page, filtersForm, search],
@@ -93,13 +89,41 @@ const Vacancies = () => {
 		queryFn: () => getFields(),
 	});
 
-	const onChangeSearch = useCallback((values: SearchForm) => {
-		setSearch(values.search);
-	}, []);
+	const onChangeSearch = useCallback(
+		(values: SearchForm) => {
+			const newParams = new URLSearchParams(urlSearchString);
+			newParams.set('search', values.search);
+			navigate(`${pathname}?${newParams.toString()}`);
+		},
+		[pathname, urlSearchString]
+	);
 
-	const onChangeFilters = useCallback((values: FiltersForm) => {
-		setFiltersForm(values);
-	}, []);
+	const onChangeFilters = useCallback(
+		(values: FiltersForm) => {
+			const newParams = new URLSearchParams(urlSearchString);
+
+			newParams.delete('field');
+			newParams.delete('from');
+			newParams.delete('to');
+
+			if (values.catalogues) newParams.set('field', values.catalogues);
+			if (values.payment_from)
+				newParams.set('from', values.payment_from.toString());
+			if (values.payment_to) newParams.set('to', values.payment_to.toString());
+
+			navigate(`${pathname}?${newParams.toString()}`);
+		},
+		[pathname, urlSearchString]
+	);
+
+	const onChangePage = useCallback(
+		(newPage: number) => {
+			const newParams = new URLSearchParams(urlSearchString);
+			newParams.set('page', newPage.toString());
+			navigate(`${pathname}?${newParams.toString()}`);
+		},
+		[pathname, urlSearchString]
+	);
 
 	useLayoutEffect(() => {
 		const buttonRect = searchButtonRef.current?.getBoundingClientRect();
@@ -109,22 +133,24 @@ const Vacancies = () => {
 	}, []);
 
 	useEffect(() => {
-		const newSearchParams = new URLSearchParams();
+		const newParams = new URLSearchParams();
 
-		const {
-			catalogues,
-			payment_from: paymentFrom,
-			payment_to: paymentTo,
-		} = filtersForm;
+		newParams.append('page', page.toString());
+		if (catalogue) newParams.append('field', catalogue);
+		if (paymentFrom) newParams.append('from', paymentFrom.toString());
+		if (paymentTo) newParams.append('to', paymentTo.toString());
+		if (search) newParams.append('search', search);
+		reset({ search });
 
-		newSearchParams.append('page', page.toString());
-		if (catalogues) newSearchParams.append('field', catalogues);
-		if (paymentFrom) newSearchParams.append('from', paymentFrom.toString());
-		if (paymentTo) newSearchParams.append('to', paymentTo.toString());
-		if (search) newSearchParams.append('search', search);
+		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
+	}, []);
 
-		navigate(`${pathname}?${newSearchParams.toString()}`);
-	}, [page, filtersForm, search]);
+	useEffect(() => {
+		const searchParams = new URLSearchParams(urlSearchString);
+		const pageSearch = searchParams.get('search') || '';
+
+		reset({ search: pageSearch });
+	}, [urlSearchString]);
 
 	const totalPages = vacancies?.total
 		? Math.ceil(vacancies.total / 4)
@@ -208,7 +234,7 @@ const Vacancies = () => {
 					<Pagination
 						value={page}
 						className={classes.pagination}
-						onChange={setPage}
+						onChange={onChangePage}
 						total={totalPages}
 						getControlProps={getPaginationControlProps}
 					/>

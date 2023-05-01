@@ -7,8 +7,8 @@ export interface GetVacanciesRequest {
 	count: number;
 
 	fields?: string;
-	paymentFrom?: number;
-	paymentTo?: number;
+	paymentFrom?: number | string;
+	paymentTo?: number | string;
 
 	keyword?: string;
 }
