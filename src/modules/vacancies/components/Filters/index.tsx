@@ -180,7 +180,13 @@ const Filters: React.FC<FiltersProps> = ({
 					/>
 				</FormGroup>
 			</Stack>
-			<Button mt={20} fullWidth size="md" type="submit">
+			<Button
+				mt={20}
+				fullWidth
+				size="md"
+				type="submit"
+				data-elem="search-button"
+			>
 				Применить
 			</Button>
 		</Paper>
