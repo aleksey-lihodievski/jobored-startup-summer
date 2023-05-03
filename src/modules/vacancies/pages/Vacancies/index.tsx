@@ -104,13 +104,6 @@ const Vacancies = () => {
 			if (values.payment_to)
 				newParams.set(PARAM_TO, values.payment_to.toString());
 
-			// setFiltersForm((filters) => ({
-			// 	...filters,
-			// 	...(values.catalogues ? { catalogues: values.catalogues } : {}),
-			// 	...(values.payment_from ? { payment_from: values.payment_from } : {}),
-			// 	...(values.payment_to ? { payment_to: values.payment_to } : {}),
-			// }));
-
 			navigate(`${pathname}?${newParams.toString()}`);
 		},
 		[pathname, urlSearchString]
@@ -137,6 +130,10 @@ const Vacancies = () => {
 
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
 	}, []);
+
+	useEffect(() => {
+		reset({ search });
+	}, [search]);
 
 	const entities = vacancies?.total
 		? Math.min(vacancies.total, MAX_ENTITIES)
