@@ -11,3 +11,5 @@ export * from './VacancyHeader';
 
 export { default as VacancyBody } from './VacancyBody';
 export * from './VacancyBody';
+
+export { default as VacanciesSearch } from './VacanciesSearch';

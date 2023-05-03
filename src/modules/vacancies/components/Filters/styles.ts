@@ -9,20 +9,6 @@ export const useStyles = createStyles((theme) => ({
 		minWidth: 315,
 	},
 
-	title: {
-		fontSize: rem(20),
-	},
-
-	resetText__wrapper: {
-		cursor: 'pointer',
-	},
-
-	resetText: {
-		color: theme.colors.gray[COLOR_INDEX],
-		fontSize: rem(14),
-		fontWeight: 500,
-	},
-
 	filters__select: {
 		['.mantine-Select-rightSection']: {
 			pointerEvents: 'none',
