@@ -138,6 +138,10 @@ const Vacancies = () => {
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
 	}, []);
 
+	useEffect(() => {
+		reset({ search });
+	}, [search]);
+
 	const entities = vacancies?.total
 		? Math.min(vacancies.total, MAX_ENTITIES)
 		: DEFAULT_PAGES * PAGE_ITEMS;
