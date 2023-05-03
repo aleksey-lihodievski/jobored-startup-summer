@@ -35,8 +35,7 @@ function App() {
 		try {
 			const data = await loginUser();
 
-			const nowUtc = new Date().getTime();
-			const expirationDate = data.expires_in * 1000 + nowUtc;
+			const expirationDate = data.ttl * 1000;
 
 			setToken(ACCESS_TOKEN_KEY, data.access_token);
 			setToken(REFRESH_TOKEN_KEY, data.refresh_token);
