@@ -5,15 +5,17 @@ import axios, {
 	InternalAxiosRequestConfig,
 } from 'axios';
 
-import { loginUser } from '@modules/auth/api';
+import { loginUser, refreshTokens } from '@modules/auth/api';
 
 import {
 	ACCESS_TOKEN_KEY,
+	EXPIRE_DATE_KEY,
+	REFRESH_TOKEN_KEY,
 	VITE_CLIENT_SECRET,
 	VITE_JOBS_API_URL,
 	VITE_X_SECRET_KEY,
 } from '../constants';
-import { getToken } from '../services';
+import { getToken, setToken } from '../services';
 
 const CLIENT_SECRET_KEY = import.meta.env[VITE_CLIENT_SECRET];
 const X_SECRET_KEY = import.meta.env[VITE_X_SECRET_KEY];
@@ -41,12 +43,23 @@ const onResponse = async (response: AxiosResponse): Promise<AxiosResponse> => {
 };
 
 const onResponseError = async (error: AxiosError): Promise<AxiosError> => {
-	if (
-		error.response &&
-		[HttpStatusCode.Unauthorized].includes(error.response.status)
-	) {
-		await loginUser();
+	const refreshToken = getToken(REFRESH_TOKEN_KEY);
+
+	if (error.response) {
+		if ([HttpStatusCode.Unauthorized].includes(error.response.status)) {
+			const data = await loginUser();
+			const expireDate = data.ttl * 1000;
+
+			setToken(ACCESS_TOKEN_KEY, data.access_token);
+			setToken(REFRESH_TOKEN_KEY, data.refresh_token);
+			setToken(EXPIRE_DATE_KEY, expireDate.toString());
+		}
+
+		if ([HttpStatusCode.Gone].includes(error.response.status)) {
+			await refreshTokens(refreshToken);
+		}
 	}
+
 	return Promise.reject(error);
 };
 

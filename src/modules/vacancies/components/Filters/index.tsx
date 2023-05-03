@@ -1,15 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-	Button,
-	Flex,
-	Group,
-	NumberInput,
-	Paper,
-	Select,
-	Stack,
-	Text,
-	Title,
-} from '@mantine/core';
+import { Button, NumberInput, Paper, Select, Stack } from '@mantine/core';
 import React, {
 	useCallback,
 	useEffect,
@@ -19,13 +9,13 @@ import React, {
 } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { IconChevronDown, IconClose } from '@assets/icons';
+import { IconChevronDown } from '@assets/icons';
 
 import { FormGroup } from '@modules/common/components';
-import { Catalogue } from '@modules/vacancies/types';
+import { Catalogue, FiltersForm } from '@modules/vacancies/types';
 
+import { FiltersHeader } from './components';
 import { useStyles } from './styles';
-import { FiltersForm } from './types';
 import { filterSchema } from './validation';
 
 const PAYMENT_STEP = 50;
@@ -104,22 +94,7 @@ const Filters: React.FC<FiltersProps> = ({
 			top={sticky ? top : undefined}
 			withBorder
 		>
-			<Group position="apart">
-				<Title order={3} className={classes.title}>
-					Фильтры
-				</Title>
-
-				<Flex
-					align="center"
-					className={classes.resetText__wrapper}
-					onClick={onReset}
-				>
-					<Text color="red" className={classes.resetText}>
-						Сбросить все
-					</Text>
-					<img src={IconClose} alt="" className={classes.closeIcon} />
-				</Flex>
-			</Group>
+			<FiltersHeader onFiltersReset={onReset} />
 
 			<Stack spacing={15} mt={22}>
 				<FormGroup title="Отрасль">
@@ -180,13 +155,17 @@ const Filters: React.FC<FiltersProps> = ({
 					/>
 				</FormGroup>
 			</Stack>
-			<Button mt={20} fullWidth size="md" type="submit">
+			<Button
+				mt={20}
+				fullWidth
+				size="md"
+				type="submit"
+				data-elem="search-button"
+			>
 				Применить
 			</Button>
 		</Paper>
 	);
 };
 
-export default React.memo(Filters);
-
-export * from './types';
+export default Filters;

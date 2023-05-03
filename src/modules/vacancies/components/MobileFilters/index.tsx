@@ -1,9 +1,9 @@
 import { Accordion } from '@mantine/core';
 import React from 'react';
 
-import { Catalogue } from '@modules/vacancies/types';
+import { Catalogue, FiltersForm } from '@modules/vacancies/types';
 
-import Filters, { FiltersForm } from '../Filters';
+import Filters from '../Filters';
 import { useStyles } from './styles';
 
 interface MobileFiltersProps {

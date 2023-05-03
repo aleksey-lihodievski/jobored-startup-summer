@@ -1,18 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box, Button, Group, Input, Pagination, Stack } from '@mantine/core';
+import { Box, Group, Pagination, Stack } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import {
-	useCallback,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from 'react';
+import { useCallback, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import { IconSearch } from '@assets/icons';
 
 import { DefaultContainer } from '@modules/common/components';
 import { getPaginationControlProps } from '@modules/common/helpers';
@@ -21,21 +13,19 @@ import { NothingHere } from '@modules/not-found/components';
 import { getFields, getVacancies } from '@modules/vacancies/api';
 import {
 	Filters,
-	FiltersForm,
 	MobileFilters,
+	VacanciesSearch,
 	VacancyCard,
 	VacancyCardSkeleton,
 } from '@modules/vacancies/components';
+import { FiltersForm, SearchForm } from '@modules/vacancies/types';
 
 import { useStyles } from './styles';
-import { SearchForm } from './types';
 import { searchSchema } from './validation';
 
-const INPUT_PADDING = 24;
 const DEFAULT_PAGES = 5;
 const PAGE_ITEMS = 4;
-const SEARCH_ICON_WIDTH = 13;
-const SEARCH_ICON_X_PADDINGS = 23;
+const MAX_ENTITIES = 500;
 
 const PARAM_PAGE = 'page';
 const PARAM_SEARCH = 'search';
@@ -48,13 +38,7 @@ const Vacancies = () => {
 	const params = new URLSearchParams(urlSearchString);
 	const navigate = useNavigate();
 
-	const [buttonWidth, setButtonWidth] = useState<number>();
-
-	const { classes } = useStyles({
-		iconSectionWidth: SEARCH_ICON_WIDTH + SEARCH_ICON_X_PADDINGS,
-	});
-
-	const searchButtonRef = useRef<HTMLButtonElement>(null);
+	const { classes } = useStyles();
 
 	const search = params.get(PARAM_SEARCH) || '';
 
@@ -70,11 +54,11 @@ const Vacancies = () => {
 	const paymentFrom = Number(params.get(PARAM_FROM)) || '';
 	const paymentTo = Number(params.get(PARAM_TO)) || '';
 
-	const filtersForm = {
+	const filtersForm: FiltersForm = {
 		catalogues: catalogue,
 		payment_from: paymentFrom,
 		payment_to: paymentTo,
-	} as const;
+	};
 
 	const { data: vacancies, isLoading: vacanciesLoading } = useQuery(
 		['vacancies', page, filtersForm, search],
@@ -120,6 +104,13 @@ const Vacancies = () => {
 			if (values.payment_to)
 				newParams.set(PARAM_TO, values.payment_to.toString());
 
+			// setFiltersForm((filters) => ({
+			// 	...filters,
+			// 	...(values.catalogues ? { catalogues: values.catalogues } : {}),
+			// 	...(values.payment_from ? { payment_from: values.payment_from } : {}),
+			// 	...(values.payment_to ? { payment_to: values.payment_to } : {}),
+			// }));
+
 			navigate(`${pathname}?${newParams.toString()}`);
 		},
 		[pathname, urlSearchString]
@@ -134,13 +125,6 @@ const Vacancies = () => {
 		[pathname, urlSearchString]
 	);
 
-	useLayoutEffect(() => {
-		const buttonRect = searchButtonRef.current?.getBoundingClientRect();
-		const width = buttonRect ? buttonRect.width + INPUT_PADDING : 0;
-
-		setButtonWidth(width);
-	}, []);
-
 	useEffect(() => {
 		const newParams = new URLSearchParams();
 
@@ -154,16 +138,11 @@ const Vacancies = () => {
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
 	}, []);
 
-	useEffect(() => {
-		const searchParams = new URLSearchParams(urlSearchString);
-		const pageSearch = searchParams.get(PARAM_SEARCH) || '';
+	const entities = vacancies?.total
+		? Math.min(vacancies.total, MAX_ENTITIES)
+		: DEFAULT_PAGES * PAGE_ITEMS;
 
-		reset({ search: pageSearch });
-	}, [urlSearchString]);
-
-	const totalPages = vacancies?.total
-		? Math.ceil(vacancies.total / 4)
-		: DEFAULT_PAGES;
+	const totalPages = Math.ceil(entities / PAGE_ITEMS);
 
 	const readyToDisplay = !vacanciesLoading && vacancies;
 
@@ -191,41 +170,11 @@ const Vacancies = () => {
 				/>
 				<Box className={classes.flex1}>
 					<Stack align="stretch" className={classes.flex1}>
-						<form onSubmit={handleSubmit(onChangeSearch)}>
-							<Controller
-								name="search"
-								render={({ field }) => (
-									<Input
-										{...field}
-										data-elem="search-input"
-										size="lg"
-										placeholder="Введите название вакансии"
-										className={classes.searchInput}
-										icon={
-											<img
-												src={IconSearch}
-												alt=""
-												className={classes.searchIcon}
-											/>
-										}
-										iconWidth={SEARCH_ICON_WIDTH + SEARCH_ICON_X_PADDINGS}
-										rightSectionWidth={buttonWidth}
-										rightSection={
-											<Button
-												ref={searchButtonRef}
-												data-elem="search-button"
-												type="submit"
-												className={classes.inputButton}
-												size="xs"
-											>
-												Поиск
-											</Button>
-										}
-									/>
-								)}
-								control={control}
-							/>
-						</form>
+						<VacanciesSearch
+							onChange={handleSubmit(onChangeSearch)}
+							control={control}
+						/>
+
 						{readyToDisplay ? (
 							vacancies.objects.map((vacancy) => (
 								<VacancyCard key={vacancy.id} data={vacancy} />

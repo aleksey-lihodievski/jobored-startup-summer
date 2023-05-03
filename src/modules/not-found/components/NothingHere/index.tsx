@@ -7,11 +7,13 @@ import { ImgNotFound } from '@assets/img';
 import { useStyles } from './styles';
 
 interface NothingHereProps {
+	title?: string;
 	className?: string;
 	withButton?: boolean;
 }
 
 const NothingHere: React.FC<NothingHereProps> = ({
+	title = 'Упс, здесь еще ничего нет!',
 	className,
 	withButton = true,
 }) => {
@@ -25,7 +27,7 @@ const NothingHere: React.FC<NothingHereProps> = ({
 				height="100%"
 				className={classes.image}
 			/>
-			<Title className={classes.title}>Упс, здесь еще ничего нет!</Title>
+			<Title className={classes.title}>{title}</Title>
 			{withButton && (
 				<Button
 					variant="light"
