@@ -1,13 +1,14 @@
-import { createStyles, rem } from '@mantine/core';
+import { createStyles } from '@mantine/core';
 
 export const useStyles = createStyles((theme) => ({
 	mobileFilters: {
 		minWidth: 'unset',
+		marginTop: 16,
 		width: '100%',
 	},
 
 	accordion: {
-		marginBottom: rem(16),
+		marginBottom: 16,
 
 		['.mantine-Accordion-control']: {
 			padding: 0,
@@ -19,6 +20,12 @@ export const useStyles = createStyles((theme) => ({
 
 		['.mantine-Accordion-label']: {
 			paddingTop: 0,
+		},
+	},
+
+	accordion__label: {
+		['.mantine-Accordion-label']: {
+			paddingBottom: 0,
 		},
 	},
 
