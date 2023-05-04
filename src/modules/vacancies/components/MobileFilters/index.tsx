@@ -25,7 +25,9 @@ const MobileFilters: React.FC<MobileFiltersProps> = ({
 			variant="filled"
 		>
 			<Accordion.Item value="filters">
-				<Accordion.Control>Фильтры</Accordion.Control>
+				<Accordion.Control className={classes.accordion__label}>
+					Фильтры
+				</Accordion.Control>
 				<Accordion.Panel>
 					<Filters
 						fields={fields}
