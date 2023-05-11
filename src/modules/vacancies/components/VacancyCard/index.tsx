@@ -36,7 +36,7 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 			return;
 		}
 
-		addFavoriteVacancy(data);
+		addFavoriteVacancy(data.id);
 		setIsFavorite(true);
 	}, [isFavorite, data]);
 

@@ -5,7 +5,8 @@ import { GetVacanciesRequest, GetVacanciesResponse } from './dto';
 export const getVacancies = async (
 	params: GetVacanciesRequest
 ): Promise<GetVacanciesResponse> => {
-	const { pageIdx, count, fields, paymentFrom, paymentTo, keyword } = params;
+	const { pageIdx, count, fields, paymentFrom, paymentTo, keyword, ids } =
+		params;
 
 	return jobsApi
 		.get('/2.0/vacancies/', {
@@ -20,6 +21,8 @@ export const getVacancies = async (
 				keyword,
 				published: 1,
 				no_agreement: 1,
+
+				ids,
 			},
 		})
 		.then((res) => res.data);

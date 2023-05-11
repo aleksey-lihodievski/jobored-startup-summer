@@ -1,4 +1,5 @@
 import { Pagination, Stack } from '@mantine/core';
+import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,7 +8,11 @@ import { DefaultContainer } from '@modules/common/components';
 import { getPaginationControlProps } from '@modules/common/helpers';
 import { getPageTitle } from '@modules/common/services';
 import { NothingHere } from '@modules/not-found/components';
-import { VacancyCard } from '@modules/vacancies/components';
+import { getVacancies } from '@modules/vacancies/api';
+import {
+	VacancyCard,
+	VacancyCardSkeleton,
+} from '@modules/vacancies/components';
 import { getFavoriteVacancies } from '@modules/vacancies/services';
 
 import { useStyles } from './styles';
@@ -20,21 +25,23 @@ const Favorites = () => {
 	const navigate = useNavigate();
 	const params = new URLSearchParams(search);
 
-	const vacancies = useMemo(() => getFavoriteVacancies(), []);
-	const hasVacancies = vacancies.length > 0;
+	const vacanciesKeys = useMemo(() => getFavoriteVacancies(), []);
+	const totalVacancies = vacanciesKeys.length;
+	const totalPages = Math.ceil(vacanciesKeys.length / PAGE_ITEMS);
 
-	const totalPages = Math.ceil(vacancies.length / PAGE_ITEMS);
-
-	const page = Number(params.get(PARAM_PAGE))
-		? Math.min(Number(params.get(PARAM_PAGE)), totalPages)
-		: 1;
-
+	const paramsPage = Number(params.get(PARAM_PAGE));
+	const page = paramsPage ? Math.min(paramsPage, totalPages) : 1;
 	const pageIdx = page - 1;
 
-	const pageVacancies = useMemo(
-		() => vacancies.slice(pageIdx * PAGE_ITEMS, page * PAGE_ITEMS),
-		[vacancies, page, pageIdx]
+	const hasVacancies = vacanciesKeys.length > 0;
+	const pageAmount = Math.min(
+		totalVacancies - pageIdx * PAGE_ITEMS,
+		PAGE_ITEMS
 	);
+	const pageVacancies = useQuery(['favorites', pageIdx, vacanciesKeys], {
+		queryFn: () =>
+			getVacancies({ pageIdx, count: PAGE_ITEMS, ids: vacanciesKeys }),
+	});
 
 	const { classes } = useStyles();
 
@@ -65,9 +72,13 @@ const Favorites = () => {
 			{hasVacancies ? (
 				<>
 					<Stack align="stretch">
-						{pageVacancies.map((vacancy) => (
-							<VacancyCard key={vacancy.id} data={vacancy} />
-						))}
+						{pageVacancies.data
+							? pageVacancies.data.objects.map((vacancy) => (
+									<VacancyCard key={vacancy.id} data={vacancy} />
+							  ))
+							: Array(pageAmount)
+									.fill(true)
+									.map((_, idx) => <VacancyCardSkeleton key={idx} />)}
 					</Stack>
 					<Pagination
 						value={page}
