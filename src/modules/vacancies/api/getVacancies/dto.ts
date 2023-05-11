@@ -11,6 +11,8 @@ export interface GetVacanciesRequest {
 	paymentTo?: number | string;
 
 	keyword?: string;
+
+	ids?: number[];
 }
 
 export interface GetVacanciesResponse {

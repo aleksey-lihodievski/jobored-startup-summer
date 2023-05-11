@@ -21,11 +21,11 @@ import { Vacancy } from '@modules/vacancies/types';
 
 import { useStyles } from './styles';
 
-interface VacancyCardProps {
+interface VacancyHeaderProps {
 	data: Vacancy;
 }
 
-const VacancyHeader: React.FC<VacancyCardProps> = ({ data }) => {
+const VacancyHeader: React.FC<VacancyHeaderProps> = ({ data }) => {
 	const { classes } = useStyles();
 
 	const {
@@ -48,7 +48,7 @@ const VacancyHeader: React.FC<VacancyCardProps> = ({ data }) => {
 			return;
 		}
 
-		addFavoriteVacancy(data);
+		addFavoriteVacancy(data.id);
 		setIsFavorite(true);
 	}, [isFavorite, data]);
 

@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Group, Pagination, Stack } from '@mantine/core';
+import { useWindowScroll } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
@@ -42,6 +43,8 @@ const Vacancies = () => {
 
 	const search = params.get(PARAM_SEARCH) || '';
 
+	const [, scrollTo] = useWindowScroll();
+
 	const { handleSubmit, control, reset } = useForm({
 		defaultValues: {
 			search,
@@ -79,13 +82,20 @@ const Vacancies = () => {
 		queryFn: () => getFields(),
 	});
 
+	const scrollToTop = () => {
+		scrollTo({ y: 0 });
+	};
+
 	const onChangeSearch = useCallback(
 		(values: SearchForm) => {
 			const newParams = new URLSearchParams(urlSearchString);
 			newParams.delete(PARAM_SEARCH);
+			newParams.set(PARAM_PAGE, '1');
 
 			if (values.search) newParams.set(PARAM_SEARCH, values.search);
 			navigate(`${pathname}?${newParams.toString()}`);
+
+			scrollToTop();
 		},
 		[pathname, urlSearchString]
 	);
@@ -98,6 +108,8 @@ const Vacancies = () => {
 			newParams.delete(PARAM_FROM);
 			newParams.delete(PARAM_TO);
 
+			newParams.set(PARAM_PAGE, '1');
+
 			if (values.catalogues) newParams.set(PARAM_FIELD, values.catalogues);
 			if (values.payment_from)
 				newParams.set(PARAM_FROM, values.payment_from.toString());
@@ -105,6 +117,8 @@ const Vacancies = () => {
 				newParams.set(PARAM_TO, values.payment_to.toString());
 
 			navigate(`${pathname}?${newParams.toString()}`);
+
+			scrollToTop();
 		},
 		[pathname, urlSearchString]
 	);
@@ -113,7 +127,10 @@ const Vacancies = () => {
 		(newPage: number) => {
 			const newParams = new URLSearchParams(urlSearchString);
 			newParams.set(PARAM_PAGE, newPage.toString());
+
 			navigate(`${pathname}?${newParams.toString()}`);
+
+			scrollToTop();
 		},
 		[pathname, urlSearchString]
 	);
@@ -130,10 +147,6 @@ const Vacancies = () => {
 
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
 	}, []);
-
-	useEffect(() => {
-		reset({ search });
-	}, [search]);
 
 	const entities = vacancies?.total
 		? Math.min(vacancies.total, MAX_ENTITIES)
