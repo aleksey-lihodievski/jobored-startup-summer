@@ -1,4 +1,5 @@
 import { Pagination, Stack } from '@mantine/core';
+import { useWindowScroll } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
@@ -25,6 +26,8 @@ const Favorites = () => {
 	const navigate = useNavigate();
 	const params = new URLSearchParams(search);
 
+	const [, scrollTo] = useWindowScroll();
+
 	const vacanciesKeys = useMemo(() => getFavoriteVacancies(), []);
 	const totalVacancies = vacanciesKeys.length;
 	const totalPages = Math.ceil(vacanciesKeys.length / PAGE_ITEMS);
@@ -45,11 +48,16 @@ const Favorites = () => {
 
 	const { classes } = useStyles();
 
+	const scrollToTop = () => {
+		scrollTo({ y: 0 });
+	};
+
 	const onChangePage = useCallback(
 		(newPage: number) => {
 			const newParams = new URLSearchParams(search);
 			newParams.set(PARAM_PAGE, newPage.toString());
 			navigate(`${pathname}?${newParams.toString()}`);
+			scrollToTop();
 		},
 		[pathname, search]
 	);
