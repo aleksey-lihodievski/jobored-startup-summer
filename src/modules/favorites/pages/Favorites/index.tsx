@@ -1,5 +1,4 @@
 import { Pagination, Stack } from '@mantine/core';
-import { useWindowScroll } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet';
@@ -22,11 +21,9 @@ const PAGE_ITEMS = 4;
 const PARAM_PAGE = 'page';
 
 const Favorites = () => {
-	const { pathname, search } = useLocation();
+	const { pathname, search: urlSearchString } = useLocation();
 	const navigate = useNavigate();
-	const params = new URLSearchParams(search);
-
-	const [, scrollTo] = useWindowScroll();
+	const params = new URLSearchParams(urlSearchString);
 
 	const vacanciesKeys = useMemo(() => getFavoriteVacancies(), []);
 	const totalVacancies = vacanciesKeys.length;
@@ -49,17 +46,16 @@ const Favorites = () => {
 	const { classes } = useStyles();
 
 	const scrollToTop = () => {
-		scrollTo({ y: 0 });
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
 	const onChangePage = useCallback(
 		(newPage: number) => {
-			const newParams = new URLSearchParams(search);
+			const newParams = new URLSearchParams(urlSearchString);
 			newParams.set(PARAM_PAGE, newPage.toString());
 			navigate(`${pathname}?${newParams.toString()}`);
-			scrollToTop();
 		},
-		[pathname, search]
+		[pathname, urlSearchString]
 	);
 
 	useEffect(() => {
@@ -69,6 +65,10 @@ const Favorites = () => {
 
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
 	}, []);
+
+	useEffect(() => {
+		scrollToTop();
+	}, [urlSearchString]);
 
 	const title = getPageTitle('Избранное');
 
