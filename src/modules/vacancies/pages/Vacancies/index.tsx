@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Group, Pagination, Stack } from '@mantine/core';
-import { useWindowScroll } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
@@ -43,8 +42,6 @@ const Vacancies = () => {
 
 	const search = params.get(PARAM_SEARCH) || '';
 
-	const [, scrollTo] = useWindowScroll();
-
 	const { handleSubmit, control, reset } = useForm({
 		defaultValues: {
 			search,
@@ -83,7 +80,7 @@ const Vacancies = () => {
 	});
 
 	const scrollToTop = () => {
-		scrollTo({ y: 0 });
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
 	const onChangeSearch = useCallback(
@@ -91,11 +88,10 @@ const Vacancies = () => {
 			const newParams = new URLSearchParams(urlSearchString);
 			newParams.delete(PARAM_SEARCH);
 			newParams.set(PARAM_PAGE, '1');
-
 			if (values.search) newParams.set(PARAM_SEARCH, values.search);
-			navigate(`${pathname}?${newParams.toString()}`);
 
-			scrollToTop();
+			// scrollToTop();
+			navigate(`${pathname}?${newParams.toString()}`);
 		},
 		[pathname, urlSearchString]
 	);
@@ -116,9 +112,8 @@ const Vacancies = () => {
 			if (values.payment_to)
 				newParams.set(PARAM_TO, values.payment_to.toString());
 
+			// scrollToTop();
 			navigate(`${pathname}?${newParams.toString()}`);
-
-			scrollToTop();
 		},
 		[pathname, urlSearchString]
 	);
@@ -128,9 +123,8 @@ const Vacancies = () => {
 			const newParams = new URLSearchParams(urlSearchString);
 			newParams.set(PARAM_PAGE, newPage.toString());
 
+			// scrollToTop();
 			navigate(`${pathname}?${newParams.toString()}`);
-
-			scrollToTop();
 		},
 		[pathname, urlSearchString]
 	);
@@ -147,6 +141,10 @@ const Vacancies = () => {
 
 		navigate(`${pathname}?${newParams.toString()}`, { replace: true });
 	}, []);
+
+	useEffect(() => {
+		scrollToTop();
+	}, [urlSearchString]);
 
 	const entities = vacancies?.total
 		? Math.min(vacancies.total, MAX_ENTITIES)
