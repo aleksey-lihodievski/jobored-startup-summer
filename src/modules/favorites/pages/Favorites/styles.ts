@@ -7,6 +7,6 @@ export const useStyles = createStyles(() => ({
 	},
 
 	nothingHere: {
-		marginTop: 84,
+		marginTop: 83,
 	},
 }));

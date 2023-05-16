@@ -25,7 +25,7 @@ const Vacancy = () => {
 	const dataIsReady = !isLoading && vacancy;
 
 	return (
-		<DefaultContainer>
+		<DefaultContainer small>
 			<Helmet>
 				<title>{title}</title>
 			</Helmet>

@@ -2,7 +2,7 @@ import { createStyles } from '@mantine/core';
 
 export const useStyles = createStyles((theme) => ({
 	mobileFilters: {
-		minWidth: 'unset',
+		minWidth: '0 !important',
 		marginTop: 16,
 		width: '100%',
 	},

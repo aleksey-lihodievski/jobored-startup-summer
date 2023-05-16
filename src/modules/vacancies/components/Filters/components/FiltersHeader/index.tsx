@@ -13,7 +13,7 @@ const FiltersHeader: React.FC<FilterHeaderProps> = ({ onFiltersReset }) => {
 	const { classes } = useStyles();
 
 	return (
-		<Group position="apart">
+		<Group position="apart" pt={2}>
 			<Title order={3} className={classes.title}>
 				Фильтры
 			</Title>

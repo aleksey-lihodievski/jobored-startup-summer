@@ -73,7 +73,7 @@ const Favorites = () => {
 	const title = getPageTitle('Избранное');
 
 	return (
-		<DefaultContainer>
+		<DefaultContainer small>
 			<Helmet>
 				<title>{title}</title>
 			</Helmet>

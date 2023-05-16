@@ -132,7 +132,7 @@ const defaultStyles: Styles<
 > = (theme) => ({
 	main: {
 		backgroundColor: theme.colors.gray[0],
-		paddingTop: '7.5rem',
+		paddingTop: '7.6rem',
 	},
 });
 
