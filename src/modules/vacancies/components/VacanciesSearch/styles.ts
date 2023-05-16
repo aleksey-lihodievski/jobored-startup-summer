@@ -25,6 +25,8 @@ export const useStyles = createStyles(
 		},
 
 		inputButton: {
+			paddingLeft: 19,
+			paddingRight: 19,
 			fontSize: rem(14),
 		},
 	})

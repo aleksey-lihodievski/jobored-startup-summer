@@ -44,12 +44,12 @@ const VacancyCard: React.FC<VacancyCardProps> = ({ data }) => {
 		<Paper
 			component="article"
 			p={23}
-			pb={18}
+			pb={21}
 			pt={20}
 			withBorder
 			data-elem={`vacancy-${data.id}`}
 		>
-			<Stack spacing={11}>
+			<Stack spacing={13}>
 				<CardHeader
 					id={data.id}
 					title={profession}

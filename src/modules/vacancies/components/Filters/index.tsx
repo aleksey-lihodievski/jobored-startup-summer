@@ -96,7 +96,7 @@ const Filters: React.FC<FiltersProps> = ({
 		>
 			<FiltersHeader onFiltersReset={onReset} />
 
-			<Stack spacing={15} mt={22}>
+			<Stack spacing={16} mt={27}>
 				<FormGroup title="Отрасль">
 					<Controller
 						name="catalogues"
@@ -157,6 +157,7 @@ const Filters: React.FC<FiltersProps> = ({
 			</Stack>
 			<Button
 				mt={20}
+				className={classes.filterButton}
 				fullWidth
 				size="md"
 				type="submit"
