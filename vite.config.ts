@@ -25,7 +25,7 @@ export default ({ mode }) => {
 				'/api': {
 					target: process.env.VITE_JOBS_API_URL,
 					changeOrigin: true,
-					secure: false,
+					secure: true,
 					rewrite: (path) => path.replace(/^\/api/, ''),
 				},
 			},
