@@ -9,7 +9,7 @@ export const getVacancies = async (
 		params;
 
 	return jobsApi
-		.get('/2.0/vacancies/', {
+		.get('/api/2.0/vacancies/', {
 			params: {
 				page: pageIdx,
 				count,
