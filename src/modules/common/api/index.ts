@@ -12,10 +12,13 @@ import {
 	EXPIRE_DATE_KEY,
 	REFRESH_TOKEN_KEY,
 	VITE_CLIENT_SECRET,
+	VITE_JOBS_API_URL,
+	VITE_X_SECRET_KEY,
 } from '../constants';
 import { getToken, setToken } from '../services';
 
 const CLIENT_SECRET_KEY = import.meta.env[VITE_CLIENT_SECRET];
+const X_SECRET_KEY = import.meta.env[VITE_X_SECRET_KEY];
 
 const onRequest = async (
 	config: InternalAxiosRequestConfig
@@ -24,6 +27,7 @@ const onRequest = async (
 
 	if (config?.headers) {
 		if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+		config.headers['x-secret-key'] = X_SECRET_KEY;
 		config.headers['X-Api-App-Id'] = CLIENT_SECRET_KEY;
 	}
 
@@ -59,7 +63,7 @@ const onResponseError = async (error: AxiosError): Promise<AxiosError> => {
 	return Promise.reject(error);
 };
 
-export const getHttp = (baseURL?: string) => {
+export const getHttp = (baseURL: string) => {
 	const http = axios.create({
 		baseURL,
 	});
@@ -69,4 +73,4 @@ export const getHttp = (baseURL?: string) => {
 	return http;
 };
 
-export const jobsApi = getHttp();
+export const jobsApi = getHttp(import.meta.env[VITE_JOBS_API_URL]);

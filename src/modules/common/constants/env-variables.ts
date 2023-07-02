@@ -3,3 +3,4 @@ export const VITE_LOGIN = 'VITE_LOGIN';
 export const VITE_PASSWORD = 'VITE_PASSWORD';
 export const VITE_CLIENT_ID = 'VITE_CLIENT_ID';
 export const VITE_CLIENT_SECRET = 'VITE_CLIENT_SECRET';
+export const VITE_X_SECRET_KEY = 'VITE_X_SECRET_KEY';
